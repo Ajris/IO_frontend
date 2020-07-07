@@ -9,7 +9,6 @@ const rows: TileRowProps[] =
 function App() {
   return (
     <div className="App">
-      <p>Start</p>
       <Map rows={rows}/>
     </div>
   );
