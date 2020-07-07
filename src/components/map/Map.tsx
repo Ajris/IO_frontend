@@ -11,7 +11,7 @@ export interface MapProps {
 
 const TileRow = ({tiles}: TileRowProps) => {
     return (
-    <div style={{display: 'flex', flexDirection: 'row'}}>
+    <div className="map-row">
     {tiles.map(tile => <MapTile color={tile.color}/>)}
     </div>
     )
@@ -20,7 +20,7 @@ const TileRow = ({tiles}: TileRowProps) => {
 const Map = ({rows}: MapProps) => {
     console.log(rows)
     return (
-    <div style={{display: 'flex', flexDirection: 'column'}}>
+    <div className="map">
         {rows.map(row => <TileRow tiles={row.tiles}/>)}
     </div>
     )
