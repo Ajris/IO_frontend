@@ -6,7 +6,7 @@ export interface MapTileProps {
 
 function MapTile({ color }: MapTileProps) {
   return (
-    <div className="map-tile" style={{backgroundColor: color}}>
+    <div className="map-tile" style={{backgroundColor: color, width: '10vw', height: '10vw'}}>
     </div>
   );
 };
