@@ -1,13 +1,13 @@
 .map {
-	display: 'flex';
-	flex-direction: 'column';
+	display: flex;
+	flex-direction: column;
 }
 
 .map-row {
-	display: 'flex';
+	display: flex;
 }
 
 .map-tile {
-	width: '10vw';
-	height: '10vw';
+	width: 10vw;
+	height: 10vw;
 }
