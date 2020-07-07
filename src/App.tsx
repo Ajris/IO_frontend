@@ -4,7 +4,7 @@ import Map, { TileRowProps } from './components/map/Map';
 import './App.css';
 
 const rows: TileRowProps[] =
-  [1, 2, 3, 4, 5, 6].map(_ => ({"tiles": [1, 2, 3, 4, 5].map(_ => ({"color": "black"} as MapTileProps))} as TileRowProps));
+    [1, 2, 3, 4, 5, 6].map(_ => ({"tiles": [1, 2, 3, 4, 5].map(_ => ({"color": Math.random() > 0.5 ? "violet" : "yellow"} as MapTileProps))} as TileRowProps));
 
 function App() {
   return (
