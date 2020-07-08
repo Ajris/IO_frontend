@@ -2,7 +2,7 @@ import { createReducer, PayloadAction } from "@reduxjs/toolkit";
 import RootState, { GameState, PlayerPosition } from "./rootState";
 import { setGameState, movePlayer } from "./actions";
 import { Direction } from "../model/direction";
-import { Tile } from "../model/map/tile";
+import { Tile } from "../model/tile";
 
 export const initialState: RootState = {
   gameState: GameState.IN_PROGRESS,

@@ -1,4 +1,4 @@
-import { Tile } from "../model/map/tile";
+import { Tile } from "../model/tile";
 
 export enum GameState {
   IN_PROGRESS,
