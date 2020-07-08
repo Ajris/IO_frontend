@@ -1,8 +1,8 @@
-export enum State {
+export enum GameState {
   IN_PROGRESS,
   FINISHED,
 }
 
 export default interface RootState {
-  state: State
+  gameState: GameState
 }
