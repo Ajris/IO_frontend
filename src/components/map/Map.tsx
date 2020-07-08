@@ -18,7 +18,6 @@ const TileRow = ({tiles}: TileRowProps) => {
 }
 
 const Map = ({rows}: MapProps) => {
-    console.log(rows)
     return (
     <div className="map">
         {rows.map(row => <TileRow tiles={row.tiles}/>)}
