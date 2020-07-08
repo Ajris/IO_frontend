@@ -17,11 +17,15 @@ function App() {
     const mapProps = {rows: rows}
     const inventoryProps = {name: "Inventory"}
     const characterProps = {name: "Character"}
+    const locationProps = {name: "Location"}
 
     return (
         <div className="App">
             Fighter D17
-            <MainLayout mapProps={mapProps} inventoryProps={inventoryProps} characterProps={characterProps}/>
+            <MainLayout mapProps={mapProps}
+                        inventoryProps={inventoryProps}
+                        characterProps={characterProps}
+            locationProps={locationProps}/>
             <button className="btn success" onClick={() => setRows(rows_init())}>RESET MAP</button>
         </div>
     );
