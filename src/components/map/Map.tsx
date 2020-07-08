@@ -12,13 +12,12 @@ export interface MapProps {
 const TileRow = ({tiles}: TileRowProps) => {
     return (
     <div className="map-row">
-        {tiles.map(tile => <MapTile icon={tile.icon && tile.icon} color={tile.color}/>)}
+        {tiles.map(tile => <MapTile color={tile.color}/>)}
     </div>
     )
 }
 
 const Map = ({rows}: MapProps) => {
-    console.log(rows)
     return (
     <div className="map">
         {rows.map(row => <TileRow tiles={row.tiles}/>)}
