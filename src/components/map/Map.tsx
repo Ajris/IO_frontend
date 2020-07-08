@@ -12,7 +12,7 @@ export interface MapProps {
 const TileRow = ({tiles}: TileRowProps) => {
     return (
     <div className="map-row">
-    {tiles.map(tile => <MapTile color={tile.color}/>)}
+        {tiles.map(tile => <MapTile icon={tile.icon && tile.icon} color={tile.color}/>)}
     </div>
     )
 }

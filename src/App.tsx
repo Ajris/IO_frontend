@@ -1,34 +1,35 @@
-import React, {useState} from 'react';
-import {MapTileProps} from './components/map/MapTile';
-import {TileRowProps} from './components/map/Map';
+import React, {useState, useEffect} from 'react';
+import { MapTileProps } from './components/map/MapTile';
+import TileMap, { TileRowProps } from './components/map/Map';
 import './App.css';
-import Tile, {FloorTile, WallTile} from './model/map/tile'
-import MainLayout from "./components/layout/MainLayout";
+import Tile, {WallTile, FloorTile} from './model/map/tile'
+import {PlayerEntry} from './model/map/tileEntry'
+import Map, {Direction} from './model/map/map'
 
-const tiles = (): Tile[][] =>
-    [1, 2, 3, 4, 5, 6].map(_ => ([1, 2, 3, 4, 5].map(_ => (Math.random() > 0.5 ? new WallTile() : new FloorTile()))))
+                                 
+const rows_init = (map: Map): TileRowProps[] =>
+    map.tiles.map(row => ({"tiles": row.map(tile => ({"color": tile.color, "icon": tile.entry && tile.entry.icon} as MapTileProps))} as TileRowProps));
 
-
-const rows_init = (): TileRowProps[] =>
-    tiles().map(row => ({"tiles": row.map(tile => ({"color": tile.color} as MapTileProps))} as TileRowProps));
 
 function App() {
-    const [rows, setRows] = useState(rows_init());
-    const mapProps = {rows: rows}
-    const inventoryProps = {name: "Inventory"}
-    const characterProps = {name: "Character"}
-    const locationProps = {name: "Location"}
+  const [map, setMap] = useState(new Map());
+  const player = new PlayerEntry();
 
-    return (
-        <div className="App">
-            Fighter D17
-            <MainLayout mapProps={mapProps}
-                        inventoryProps={inventoryProps}
-                        characterProps={characterProps}
-            locationProps={locationProps}/>
-            <button className="btn success" onClick={() => setRows(rows_init())}>RESET MAP</button>
-        </div>
-    );
+  useEffect(() => {
+      map.registerRenderFun(setMap)
+      map.placePlayer(player);
+  });
+
+  const [rows, _] = useState(rows_init(map))
+  return (
+    <div className="App">
+      <button onClick={() => map.movePlayer(player, Direction.UP)}/>
+      <button onClick={() => map.movePlayer(player, Direction.DOWN)}/>
+      <button onClick={() => map.movePlayer(player, Direction.LEFT)}/>
+      <button onClick={() => map.movePlayer(player, Direction.RIGHT)}/>
+      <TileMap rows={rows}/>
+    </div>
+  );
 }
 
 export default App;
