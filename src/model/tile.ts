@@ -1,5 +1,6 @@
 export enum Tile {
   Wall,
-  Floor
+  Floor,
+  Player
 };
 

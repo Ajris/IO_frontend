@@ -12,6 +12,8 @@ const getTileColor = (tile: Tile): string => {
       return "black";
     case Tile.Floor:
       return "white";
+    case Tile.Player:
+      return "blue";
   }
 }
 
