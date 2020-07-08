@@ -3,6 +3,9 @@ export enum GameState {
   FINISHED,
 }
 
+export type PlayerPosition = [number, number];
+
 export default interface RootState {
   gameState: GameState
+  playerPosition: PlayerPosition
 }
