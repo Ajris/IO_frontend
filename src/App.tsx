@@ -1,12 +1,14 @@
 import React from "react";
-import Map from "./components/map/Map";
+import MainLayout from "./components/layout/MainLayout";
 import Control from "./components/control/Control";
 import './App.css';
 
 function App() {
   return (
     <div className="App">
-      <Map />
+      <MainLayout inventoryProps={{name: "Inventory"}}
+                  characterProps={{name: "Character"}}
+                  locationProps={{name: "Location"}} />
       <Control />
     </div>
   )};
