@@ -15,13 +15,13 @@ export const initialState: RootState = {
 const positionAfterMovement = (position: PlayerPosition,
   direction: Direction): PlayerPosition => {
   switch(direction) {
-    case Direction.UP:
-        return [position[0], position[1] - 1];
-    case Direction.DOWN:
-        return [position[0], position[1] + 1];
     case Direction.LEFT:
-        return [position[0] - 1, position[1]];
+        return [position[0], position[1] - 1];
     case Direction.RIGHT:
+        return [position[0], position[1] + 1];
+    case Direction.UP:
+        return [position[0] - 1, position[1]];
+    case Direction.DOWN:
         return [position[0] + 1, position[1]];
   }
 };
