@@ -12,7 +12,7 @@ function App() {
                     {name: "itemik", color: "red", image: "", bonusType: ItemBonusType.DAMAGE, value: 10},
                     {name: "mieczyk", color: "yellow", image: "", bonusType: ItemBonusType.DEFENSE, value: 20}]
             }}
-                        characterProps={{name: "Character"}}
+                        characterProps={{name: "Character", lifes: 1, exp: 2}}
                         locationProps={{name: "Location"}}/>
             <Control/>
         </div>

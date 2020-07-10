@@ -1,15 +1,16 @@
 import React from 'react';
 
 export interface CharacterProps {
-    name: String;
-};
-
-const Character = ({name}: CharacterProps) => {
+    name: string;
+    lifes: number;
+    exp: number;
+}
+const CharacterView = (characterProps: CharacterProps) => {
     return (
         <div className="character">
-            {name}
+            <CharacterView {...characterProps}/>
         </div>
     )
 }
 
-export default Character;
+export default CharacterView;
