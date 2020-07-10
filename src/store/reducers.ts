@@ -4,7 +4,7 @@ import { setGameState, movePlayer } from "./actions";
 import { Direction } from "../model/direction";
 import { Tile } from "../model/tile";
 
-const getRandomTile = () => (Math.random() > 0.5 ? Tile.Wall : Tile.Floor);
+const getRandomTile = () => (Math.random() > 0.7 ? Tile.Wall : Tile.Floor);
 
 export const initialState: RootState = {
   gameState: GameState.IN_PROGRESS,
@@ -12,7 +12,12 @@ export const initialState: RootState = {
   playerPosition: [0, 0]
 };
 
-const positionAfterMovement = (position: PlayerPosition,
+const canMoveTo = (map: Tile[][], position: PlayerPosition): boolean => {
+    const [x, y] = position
+    return map[x] && map[x][y] === Tile.Floor;
+}
+
+const positionAfterMovement = (map: Tile[][], position: PlayerPosition,
   direction: Direction): PlayerPosition => {
   switch(direction) {
     case Direction.LEFT:
@@ -26,6 +31,12 @@ const positionAfterMovement = (position: PlayerPosition,
   }
 };
 
+const changePlayerPosition = (map: Tile[][], position: PlayerPosition,
+  direction: Direction): PlayerPosition => {
+  const newPos = positionAfterMovement(map, position, direction);
+  return canMoveTo(map, newPos) ? newPos : position;
+}
+
 export const rootReducer = createReducer(initialState, {
   [setGameState.type]: (state, action: PayloadAction<GameState>) => ({
     ...state,
@@ -33,6 +44,6 @@ export const rootReducer = createReducer(initialState, {
   }),
   [movePlayer.type]: (state, action: PayloadAction<Direction>) => ({
     ...state,
-    playerPosition: positionAfterMovement(state.playerPosition, action.payload)
+    playerPosition: changePlayerPosition(state.gameMap, state.playerPosition, action.payload)
   })
 });
