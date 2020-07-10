@@ -1,5 +1,4 @@
 import React from 'react';
-import {ItemProps} from "../inventory/Item";
 import {InventoryProps} from "../inventory/Inventory";
 
 export interface CharacterProps {

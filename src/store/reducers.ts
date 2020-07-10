@@ -1,5 +1,5 @@
 import { createReducer, PayloadAction } from "@reduxjs/toolkit";
-import RootState, { GameState, PlayerPosition } from "./rootState";
+import RootState, { GameState, Position } from "./rootState";
 import { setGameState, movePlayer } from "./actions";
 import { Direction } from "../model/direction";
 import { Tile } from "../model/tile";
@@ -9,11 +9,12 @@ const getRandomTile = () => (Math.random() > 0.5 ? Tile.Wall : Tile.Floor);
 export const initialState: RootState = {
   gameState: GameState.IN_PROGRESS,
   gameMap: Array.from(Array(5), _ => Array.from(Array(6), _ => getRandomTile())),
-  playerPosition: [0, 0]
+  playerPosition: [0, 0],
+  opponents: {opponents: [{position: [2, 3], fightFactor: 10}]}
 };
 
-const positionAfterMovement = (position: PlayerPosition,
-  direction: Direction): PlayerPosition => {
+const positionAfterMovement = (position: Position,
+  direction: Direction): Position => {
   switch(direction) {
     case Direction.LEFT:
         return [position[0], position[1] - 1];
