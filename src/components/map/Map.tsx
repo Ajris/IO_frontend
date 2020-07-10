@@ -15,16 +15,25 @@ const placePlayer = (gameMap: Tile[][], playerPosition: PlayerPosition) => {
   });
   clonedMap[playerPosition[0]][playerPosition[1]] = Tile.Player;
   return clonedMap;
-}
+};
+
+const placeItem = (gameMap: Tile[][], playerPosition: PlayerPosition) => {
+  var clonedMap = gameMap.map(function(arr) {
+    return arr.slice();
+  });
+  clonedMap[playerPosition[0]][playerPosition[1]] = Tile.Item;
+  return clonedMap;
+};
 
 const Map = ({ gameMap, playerPosition }: MapProps) => {
   let mapWithPlayer = placePlayer(gameMap, playerPosition);
+  let mapWithItem = placeItem(mapWithPlayer, [2,2])
   return (
   <div className="map">
-    {mapWithPlayer.map(row => <MapRow tiles={row} />)}
+    {mapWithItem.map(row => <MapRow tiles={row} />)}
   </div>
   )
-}
+};
 
 const mapStateToProps = ({ gameMap, playerPosition }: RootState) => ({
   gameMap: gameMap,

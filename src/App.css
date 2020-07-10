@@ -12,6 +12,13 @@
 	height: 5vw;
 }
 
+.item {
+	width: 3vw;
+	height: 3vw;
+	margin: 1vw;
+	font-size: 1vw;
+}
+
 .main-layout {
 	margin: 10px;
 	display: flex;
