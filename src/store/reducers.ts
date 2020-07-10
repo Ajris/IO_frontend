@@ -1,5 +1,5 @@
 import { createReducer, PayloadAction } from "@reduxjs/toolkit";
-import RootState, { GameState, PlayerPosition } from "./rootState";
+import RootState, { GameState, Position } from "./rootState";
 import { setGameState, movePlayer } from "./actions";
 import { Direction } from "../model/direction";
 import { Tile } from "../model/tile";
@@ -12,13 +12,13 @@ export const initialState: RootState = {
   playerPosition: [0, 0]
 };
 
-const canMoveTo = (map: Tile[][], position: PlayerPosition): boolean => {
+const canMoveTo = (map: Tile[][], position: Position): boolean => {
     const [x, y] = position
     return map[x] && map[x][y] === Tile.Floor;
 }
 
-const positionAfterMovement = (position: PlayerPosition,
-  direction: Direction): PlayerPosition => {
+const positionAfterMovement = (position: Position,
+  direction: Direction): Position => {
   switch(direction) {
     case Direction.LEFT:
         return [position[0], position[1] - 1];
@@ -31,8 +31,8 @@ const positionAfterMovement = (position: PlayerPosition,
   }
 };
 
-const changePlayerPosition = (map: Tile[][], position: PlayerPosition,
-  direction: Direction): PlayerPosition => {
+const changePlayerPosition = (map: Tile[][], position: Position,
+  direction: Direction): Position => {
   const newPos = positionAfterMovement(position, direction);
   return canMoveTo(map, newPos) ? newPos : position;
 }

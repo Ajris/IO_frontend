@@ -2,30 +2,24 @@ import React from "react";
 import { connect } from "react-redux";
 import MapRow from "./MapRow";
 import { Tile } from "../../model/tile";
-import RootState, { PlayerPosition } from "../../store/rootState";
+import RootState, { Position } from "../../store/rootState";
+import {itemPositions} from "../../model/Config";
 
 interface MapProps {
   gameMap: Tile[][],
-  playerPosition: PlayerPosition,
+  playerPosition: Position,
 }
 
-const placePlayer = (gameMap: Tile[][], playerPosition: PlayerPosition) => {
-  var clonedMap = gameMap.map(arr  => arr.slice());
-  clonedMap[playerPosition[0]][playerPosition[1]] = Tile.Player;
-  return clonedMap;
-};
-
-const placeItem = (gameMap: Tile[][], playerPosition: PlayerPosition) => {
-  var clonedMap = gameMap.map(function(arr) {
-    return arr.slice();
-  });
-  clonedMap[playerPosition[0]][playerPosition[1]] = Tile.Item;
+const placeTile = (gameMap: Tile[][], position: Position, tileType: Tile) => {
+  const clonedMap = gameMap.map(arr => arr.slice());
+  clonedMap[position[0]][position[1]] = tileType;
   return clonedMap;
 };
 
 const Map = ({ gameMap, playerPosition }: MapProps) => {
-  let mapWithPlayer = placePlayer(gameMap, playerPosition);
-  let mapWithItem = placeItem(mapWithPlayer, [2,2])
+  let mapWithPlayer = placeTile(gameMap, playerPosition, Tile.Player);
+  itemPositions.forEach(position => mapWithPlayer = placeTile(mapWithPlayer, position, Tile.Item));
+
   return (
   <div className="map">
     {mapWithPlayer.map((row, key) => <MapRow key={key} tiles={row} />)}
