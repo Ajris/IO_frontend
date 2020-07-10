@@ -20,7 +20,7 @@ const getTileColor = (tile: Tile): string => {
 export default ({ tiles }: MapRowProps) => {
   return (
     <div className="map-row">
-      {tiles.map(tile => <MapTile color={getTileColor(tile)} />)}
+      {tiles.map((tile, key) => <MapTile key={key} color={getTileColor(tile)} />)}
     </div>
   );
 }

@@ -17,7 +17,7 @@ const canMoveTo = (map: Tile[][], position: PlayerPosition): boolean => {
     return map[x] && map[x][y] === Tile.Floor;
 }
 
-const positionAfterMovement = (map: Tile[][], position: PlayerPosition,
+const positionAfterMovement = (position: PlayerPosition,
   direction: Direction): PlayerPosition => {
   switch(direction) {
     case Direction.LEFT:
@@ -33,7 +33,7 @@ const positionAfterMovement = (map: Tile[][], position: PlayerPosition,
 
 const changePlayerPosition = (map: Tile[][], position: PlayerPosition,
   direction: Direction): PlayerPosition => {
-  const newPos = positionAfterMovement(map, position, direction);
+  const newPos = positionAfterMovement(position, direction);
   return canMoveTo(map, newPos) ? newPos : position;
 }
 

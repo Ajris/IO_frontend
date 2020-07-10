@@ -10,9 +10,7 @@ interface MapProps {
 }
 
 const placePlayer = (gameMap: Tile[][], playerPosition: PlayerPosition) => {
-  var clonedMap = gameMap.map(function(arr) {
-      return arr.slice();
-  });
+  var clonedMap = gameMap.map(arr  => arr.slice());
   clonedMap[playerPosition[0]][playerPosition[1]] = Tile.Player;
   return clonedMap;
 }
@@ -21,7 +19,7 @@ const Map = ({ gameMap, playerPosition }: MapProps) => {
   let mapWithPlayer = placePlayer(gameMap, playerPosition);
   return (
   <div className="map">
-    {mapWithPlayer.map(row => <MapRow tiles={row} />)}
+    {mapWithPlayer.map((row, key) => <MapRow key={key} tiles={row} />)}
   </div>
   )
 }
