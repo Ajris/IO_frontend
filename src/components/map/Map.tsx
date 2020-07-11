@@ -19,7 +19,7 @@ const placeTile = (gameMap: Tile[][], position: Position, tileType: Tile) => {
 const Map = ({ gameMap, playerPosition }: MapProps) => {
   let mapWithPlayer = placeTile(gameMap, playerPosition, Tile.Player);
   itemPositions.forEach(position => mapWithPlayer = placeTile(mapWithPlayer, position, Tile.Item));
-
+  mapWithPlayer.forEach((row, key) => row.forEach((tile, k) => console.log(tile)));
   return (
   <div className="map">
     {mapWithPlayer.map((row, key) => <MapRow key={key} tiles={row} />)}
