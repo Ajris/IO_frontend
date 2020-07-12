@@ -36,7 +36,7 @@ const getTileItemProps = (tile: Tile): ItemProps => {
 export default ({ tiles }: MapRowProps) => {
   return (
     <div className="map-row">
-      {tiles.map(tile => <MapTile color={getTileColor(tile)} itemProps={getTileItemProps(tile)}/>)}
+      { tiles.map(tile => <MapTile color={getTileColor(tile)} itemProps={getTileItemProps(tile)}/>) }
     </div>
   );
 }

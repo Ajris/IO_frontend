@@ -1,5 +1,5 @@
 import React from "react";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 import MapRow from "./MapRow";
 import {Tile} from "../../model/tile";
 import RootState, {Position} from "../../store/rootState";
@@ -12,11 +12,9 @@ interface MapProps {
 }
 
 const placePlayer = (gameMap: Tile[][], playerPosition: Position) => {
-    var clonedMap = gameMap.map(function (arr) {
-        return arr.slice();
-    });
-    clonedMap[playerPosition[0]][playerPosition[1]] = Tile.Player;
-    return clonedMap;
+  var clonedMap = gameMap.map(arr  => arr.slice());
+  clonedMap[playerPosition[0]][playerPosition[1]] = Tile.Player;
+  return clonedMap;
 };
 
 const placeItem = (gameMap: Tile[][], playerPosition: Position) => {
@@ -26,6 +24,9 @@ const placeItem = (gameMap: Tile[][], playerPosition: Position) => {
     clonedMap[playerPosition[0]][playerPosition[1]] = Tile.Item;
     return clonedMap;
 };
+
+
+
 
 const placeOpponents = (gameMap: Tile[][], opponents: Opponents) => {
     var clonedMap = gameMap.map(function (arr) {
