@@ -3,6 +3,7 @@ import RootState, { GameState, Position } from "./rootState";
 import { setGameState, movePlayer } from "./actions";
 import { Direction } from "../model/direction";
 import { Tile } from "../model/tile";
+import {Opponents} from "../components/opponent/Opponent";
 
 const getRandomTile = () => (Math.random() > 0.7 ? Tile.Wall : Tile.Floor);
 
@@ -16,6 +17,11 @@ export const initialState: RootState = {
 const canMoveTo = (map: Tile[][], position: Position): boolean => {
   const [x, y] = position
   return map[x] && map[x][y] === Tile.Floor;
+}
+
+const isFight = (opponents: Opponents, position: Position): boolean => {
+  const [x, y] = position
+  return opponents.opponents.filter(o => o.position[0] === x && o.position[1] === y).length !== 0
 }
 
 const positionAfterMovement = (position: Position,
@@ -32,10 +38,29 @@ const positionAfterMovement = (position: Position,
   }
 };
 
+// move to the proper position
+const fight = (opponents: Opponents, position: Position): boolean => {
+  const [x, y] = position;
+  let opponentFightFactor = opponents.opponents.filter(o => o.position[0] === x && o.position[1] === y)[0].fightFactor;
+  opponents.opponents = opponents.opponents.filter(o => o.position[0] !== x || o.position[1] !== y);
+  return true;
+}
+
+
 const changePlayerPosition = (map: Tile[][], position: Position,
-  direction: Direction): Position => {
+  direction: Direction, opponents: Opponents): Position => {
   const newPos = positionAfterMovement(position, direction);
-  return canMoveTo(map, newPos) ? newPos : position;
+  if (canMoveTo(map, newPos)) {
+    if (isFight(opponents, newPos)) {
+      fight(opponents, newPos);
+      return newPos;
+    }
+    else {
+      return newPos;
+    }
+  } else {
+    return position;
+  }
 }
 
 export const rootReducer = createReducer(initialState, {
@@ -45,6 +70,6 @@ export const rootReducer = createReducer(initialState, {
   }),
   [movePlayer.type]: (state, action: PayloadAction<Direction>) => ({
     ...state,
-    playerPosition: changePlayerPosition(state.gameMap, state.playerPosition, action.payload)
+    playerPosition: changePlayerPosition(state.gameMap, state.playerPosition, action.payload, state.opponents)
   })
 });
