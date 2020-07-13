@@ -104,7 +104,7 @@ export const rootReducer = createReducer(initialState, {
   }),
   [addItem.type]: (state, action: PayloadAction<ItemProps>) => void ({
       ...state,
-      inventoryItems: addItemToInventory(state.inventoryItems, action.payload),
+      inventoryItems: addItemToInventory(state.inventoryItems, action.payload)
 
   })
 });

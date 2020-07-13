@@ -3,9 +3,12 @@ import MapTile from "./MapTile";
 import {Tile} from "../../model/tile";
 import {ItemProps} from "../inventory/Item";
 import {ItemBonusType} from "../../model/itemBonusType";
+import RootState from "../../store/rootState";
+import { connect } from "react-redux";
 
 interface MapRowProps {
-  tiles: Tile[]
+  tiles: Tile[],
+  itemsOnMap: ItemProps[]
 }
 
 const getTileColor = (tile: Tile): string => {
@@ -23,21 +26,25 @@ const getTileColor = (tile: Tile): string => {
   }
 };
 
-const getTileItemProps = (tile: Tile): ItemProps => {
+const getTileItemProps = (tile: Tile, itemsOnMap: ItemProps[]): ItemProps => {
   switch (tile) {
     case Tile.Item:
-      return {name: "itemik", color: "red", position: [2,2], bonusType: ItemBonusType.DAMAGE, value: 10};
+      return itemsOnMap[0];
     default:
       return {name: "", color: ""};
   }
 };
 
+const mapStateToProps = ({itemsOnMap }: RootState) => ({
+  itemsOnMap: itemsOnMap,
+});
 
-export default ({ tiles }: MapRowProps) => {
+const MapRow = ({tiles, itemsOnMap} : MapRowProps) => {
   return (
     <div className="map-row">
-      {tiles.map((tile, key) => <MapTile key={key} color={getTileColor(tile)} itemProps={getTileItemProps(tile)}/>)}
+      {tiles.map((tile, key) => <MapTile key={key} color={getTileColor(tile)} itemProps={getTileItemProps(tile, itemsOnMap)}/>)}
     </div>
   );
 }
 
+export default connect(mapStateToProps)(MapRow);
