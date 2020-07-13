@@ -18,6 +18,8 @@ const getTileColor = (tile: Tile): string => {
       return "blue";
     case Tile.Item:
       return "white"
+    case Tile.Opponent:
+      return "pink"
   }
 };
 

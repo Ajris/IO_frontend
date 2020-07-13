@@ -19,7 +19,7 @@ const MainLayout = (mainLayoutProps: MainLayoutProps) => {
         <Map/>
         <div>
             <Character {...mainLayoutProps.characterProps}/>
-            <Inventory {...mainLayoutProps.inventoryProps}/>
+            <Inventory {...mainLayoutProps.characterProps.inventory}/>
             <Location {...mainLayoutProps.locationProps}/>
         </div>
     </div>

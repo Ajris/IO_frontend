@@ -1,9 +1,11 @@
+
 import {createReducer, PayloadAction, createStore} from "@reduxjs/toolkit";
 import RootState, { GameState, Position } from "./rootState";
 import {setGameState, movePlayer, addItem, deleteItemFromMap} from "./actions";
 import { Direction } from "../model/direction";
 import { Tile } from "../model/tile";
 import {ItemProps} from "../components/inventory/Item";
+import {OpponentProps, Opponents} from "../components/opponent/Opponent";
 
 const getRandomTile = () => (Math.random() > 0.7 ? Tile.Wall : Tile.Floor);
 
@@ -23,7 +25,8 @@ export const initialState: RootState = {
   playerPosition: [0, 0],
   itemsPosition: [[2,2]],
   itemsOnMap: [{name: "itemik", color: "red", position: [2,2]}],
-  inventoryItems: []
+  inventoryItems: [],
+  opponents: {opponents: [{position: [2, 3], fightFactor: 10}]}
 };
 
 const canMoveTo = (map: Tile[][], position: Position): boolean => {
@@ -53,6 +56,7 @@ const positionAfterMovement = (position: Position,
 const changePlayerPosition = (map: Tile[][], position: Position,
   direction: Direction): Position => {
   const newPos = positionAfterMovement(position, direction);
+
   if(isItem(map, newPos)){
       return newPos;
   }
@@ -64,6 +68,11 @@ const addItemToInventory = (inventoryItems: ItemProps[], item: ItemProps) => {
     return inventoryItems;
 }
 
+const isFight = (opponents: Opponents, position: Position): boolean => {
+  const [x, y] = position
+  return opponents.opponents.filter(o => o.position[0] === x && o.position[1] === y).length !== 0
+}
+
 const deleteItem = (map: Tile[][], items: ItemProps[], itemsPos: Position[], inventoryItems: ItemProps[], newPos: Position) => {
     map[newPos[0]][newPos[1]] = Tile.Floor;
     items.pop();
@@ -71,7 +80,13 @@ const deleteItem = (map: Tile[][], items: ItemProps[], itemsPos: Position[], inv
     
     return map;
 }
+const fightAndUpdateOpponents = (position: Position,
+                         opponents: Opponents, direction: Direction): Opponents => {
+    const newPos = positionAfterMovement(position, direction);
 
+    const newOpponents = opponents.opponents.filter(o => o.position[0] !== newPos[0] || o.position[1] !== newPos[1]);
+    return {opponents: newOpponents}
+}
 
 export const rootReducer = createReducer(initialState, {
   [setGameState.type]: (state, action: PayloadAction<GameState>) => ({
@@ -88,6 +103,8 @@ export const rootReducer = createReducer(initialState, {
   }),
   [addItem.type]: (state, action: PayloadAction<ItemProps>) => void ({
       ...state,
-      inventoryItems: addItemToInventory(state.inventoryItems, action.payload)
+      inventoryItems: addItemToInventory(state.inventoryItems, action.payload),
+    opponents: fightAndUpdateOpponents(state.playerPosition, state.opponents, action.payload)
+
   })
 });

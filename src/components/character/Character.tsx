@@ -1,15 +1,23 @@
 import React from 'react';
+import {InventoryProps} from "../inventory/Inventory";
 
 export interface CharacterProps {
-    name: String;
-};
+        name: string;
+        lifes: number;
+        exp: number;
+        inventory: InventoryProps;
+}
 
-const Character = ({name}: CharacterProps) => {
+
+
+const CharacterView = (characterProps: CharacterProps) => {
     return (
         <div className="character">
-            {name}
+            <div>Name: {characterProps.name}</div>
+            <div>Exp: {characterProps.exp}</div>
+            <div>Lifes: {characterProps.lifes}</div>
         </div>
     )
 }
 
-export default Character;
+export default CharacterView;
