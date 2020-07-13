@@ -1,8 +1,10 @@
 import React from "react";
+import { connect } from "react-redux";
 import MainLayout from "./components/layout/MainLayout";
 import Control from "./components/control/Control";
 import './App.css';
 import {ItemBonusType} from "./model/itemBonusType";
+import RootState from "./store/rootState";
 
 function App() {
     let inventoryProps = {
@@ -12,8 +14,10 @@ function App() {
     }
     return (
         <div className="App">
-            <MainLayout characterProps={{name: "jacek", lifes: 1, exp: 2, inventory: inventoryProps}}
-                        locationProps={{name: "Location"}}/>
+            <MainLayout
+                // characterProps={{name: "jacek", lifes: 1, exp: 2, inventory: inventoryProps}}
+                //         locationProps={{name: "Location"}}
+            />
             <Control/>
         </div>
     )

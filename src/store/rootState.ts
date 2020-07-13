@@ -1,5 +1,7 @@
 import { Tile } from "../model/tile";
 import {Opponents} from "../components/opponent/Opponent";
+import {InventoryProps} from "../components/inventory/Inventory";
+import {ItemProps} from "../components/inventory/Item";
 
 export enum GameState {
   IN_PROGRESS,
@@ -13,4 +15,5 @@ export default interface RootState {
   gameMap: Tile[][]
   playerPosition: Position
   opponents: Opponents
+  inventory: InventoryProps
 }
