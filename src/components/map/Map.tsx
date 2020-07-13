@@ -3,11 +3,15 @@ import { connect } from "react-redux";
 import MapRow from "./MapRow";
 import { Tile } from "../../model/tile";
 import RootState, { Position } from "../../store/rootState";
-import {itemPositions} from "../../model/Config";
+import { deleteItemFromMap, addItem} from "../../store/actions";
+import { Dispatch } from "../../store";
+import { ItemProps } from "../inventory/Item";
 
 interface MapProps {
   gameMap: Tile[][],
   playerPosition: Position,
+  itemsPosition: Position[],
+  changeMap: (newPosition: Position) => void;
 }
 
 const placeTile = (gameMap: Tile[][], position: Position, tileType: Tile) => {
@@ -16,10 +20,14 @@ const placeTile = (gameMap: Tile[][], position: Position, tileType: Tile) => {
   return clonedMap;
 };
 
-const Map = ({ gameMap, playerPosition }: MapProps) => {
+const Map = ({ gameMap, playerPosition, itemsPosition, changeMap }: MapProps) => {
   let mapWithPlayer = placeTile(gameMap, playerPosition, Tile.Player);
-  itemPositions.forEach(position => mapWithPlayer = placeTile(mapWithPlayer, position, Tile.Item));
-  mapWithPlayer.forEach((row, key) => row.forEach((tile, k) => console.log(tile)));
+  itemsPosition.forEach(position => mapWithPlayer = placeTile(mapWithPlayer, position, Tile.Item));
+  itemsPosition.filter(position => {
+    if(position[0] === playerPosition[0] && position[1] === playerPosition[1]) {
+      changeMap(playerPosition);
+    }
+  });
   return (
   <div className="map">
     {mapWithPlayer.map((row, key) => <MapRow key={key} tiles={row} />)}
@@ -27,9 +35,16 @@ const Map = ({ gameMap, playerPosition }: MapProps) => {
   )
 };
 
-const mapStateToProps = ({ gameMap, playerPosition }: RootState) => ({
+const mapStateToProps = ({ gameMap, playerPosition, itemsPosition }: RootState) => ({
   gameMap: gameMap,
   playerPosition: playerPosition,
+  itemsPosition: itemsPosition,
 });
 
-export default connect(mapStateToProps)(Map);
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+    changeMap: (newPosition: Position) => {
+      dispatch(deleteItemFromMap(newPosition));
+    }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Map);

@@ -1,18 +1,27 @@
-import {createAction, createReducer, PayloadAction, createStore} from "@reduxjs/toolkit";
-
+import {createReducer, PayloadAction, createStore} from "@reduxjs/toolkit";
 import RootState, { GameState, Position } from "./rootState";
-import {setGameState, movePlayer, addItem} from "./actions";
+import {setGameState, movePlayer, addItem, deleteItemFromMap} from "./actions";
 import { Direction } from "../model/direction";
 import { Tile } from "../model/tile";
 import {ItemProps} from "../components/inventory/Item";
-import {ItemBonusType} from "../model/itemBonusType";
 
 const getRandomTile = () => (Math.random() > 0.7 ? Tile.Wall : Tile.Floor);
 
+const getGameMap = (itemPositions: Position[]) => {
+  const map: (Tile.Floor | Tile.Wall | Tile.Item)[][] = Array.from(Array(5), _ => Array.from(Array(6), _ => getRandomTile()));
+  itemPositions.forEach(position => {
+    const[x, y] = position;
+    map[x][y] = Tile.Item;
+  });
+
+  return map;
+}
+
 export const initialState: RootState = {
   gameState: GameState.IN_PROGRESS,
-  gameMap: Array.from(Array(5), _ => Array.from(Array(6), _ => getRandomTile())),
+  gameMap: getGameMap([[2,2]]),
   playerPosition: [0, 0],
+  itemsPosition: [[2,2]],
   inventoryItems: []
 };
 
@@ -21,12 +30,8 @@ const canMoveTo = (map: Tile[][], position: Position): boolean => {
     return map[x] && map[x][y] === Tile.Floor;
 };
 
-// TODO fix this function - it never returned 3 - Tile.Item :(
-// if it does then maybe item would be added to initialState inventoryItems - if not then we need to do this in another way
 const isItem = (map: Tile[][], position: Position): boolean => {
-    console.log("calling is item");
     const [x, y] = position;
-    console.log(map[x][y]);
     return map[x] && map[x][y] === Tile.Item;
 };
 
@@ -48,18 +53,24 @@ const changePlayerPosition = (map: Tile[][], position: Position,
   direction: Direction): Position => {
   const newPos = positionAfterMovement(position, direction);
   if(isItem(map, newPos)){
-      console.log("AAA");
-      store.dispatch(addItem({name: "itemik", color: "red", image: "", bonusType: ItemBonusType.DAMAGE, value: 10}));
       return newPos;
   }
   return canMoveTo(map, newPos) ? newPos : position;
 };
 
-const addItemToInventory = (inventoryItems: ItemProps[], item: ItemProps): ItemProps[] => {
+const addItemToInventory = (inventoryItems: ItemProps[], item: ItemProps) => {
     inventoryItems.push(item);
-    console.log(inventoryItems);
     return inventoryItems;
-};
+}
+
+const deleteItem = (map: Tile[][], itemsPos: Position[], newPos: Position) => {
+    var tile: Tile = map[newPos[0]][newPos[1]]
+    
+    map[newPos[0]][newPos[1]] = Tile.Floor;
+    itemsPos.pop()
+    
+    return map;
+}
 
 
 export const rootReducer = createReducer(initialState, {
@@ -71,10 +82,12 @@ export const rootReducer = createReducer(initialState, {
     ...state,
     playerPosition: changePlayerPosition(state.gameMap, state.playerPosition, action.payload)
   }),
+  [deleteItemFromMap.type]: (state, action: PayloadAction<Position>) => void ({
+    ...state,
+    gameMap: deleteItem(state.gameMap, state.itemsPosition, action.payload)
+  }),
   [addItem.type]: (state, action: PayloadAction<ItemProps>) => ({
       ...state,
       inventoryItems: addItemToInventory(state.inventoryItems, action.payload)
   })
 });
-
-const store = createStore(rootReducer, initialState);
