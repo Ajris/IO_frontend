@@ -5,13 +5,9 @@ import './App.css';
 import {ItemBonusType} from "./model/itemBonusType";
 
 function App() {
-    let inventoryProps = [
-            {name: "itemik", color: "red", image: "", bonusType: ItemBonusType.DAMAGE, value: 10},
-            {name: "mieczyk", color: "yellow", image: "", bonusType: ItemBonusType.DEFENSE, value: 20}]
-
     return (
         <div className="App">
-            <MainLayout characterProps={{name: "jacek", lifes: 1, exp: 2, inventory: inventoryProps}}
+            <MainLayout characterProps={{name: "jacek", lifes: 1, exp: 2, inventory: []}}
                         locationProps={{name: "Location"}}/>
             <Control/>
         </div>
