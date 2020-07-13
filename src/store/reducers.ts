@@ -95,7 +95,8 @@ export const rootReducer = createReducer(initialState, {
   }),
   [movePlayer.type]: (state, action: PayloadAction<Direction>) => ({
     ...state,
-    playerPosition: changePlayerPosition(state.gameMap, state.playerPosition, action.payload)
+    playerPosition: changePlayerPosition(state.gameMap, state.playerPosition, action.payload),
+    opponents: fightAndUpdateOpponents(state.playerPosition, state.opponents, action.payload)
   }),
   [deleteItemFromMap.type]: (state, action: PayloadAction<Position>) => void ({
     ...state,
@@ -104,7 +105,6 @@ export const rootReducer = createReducer(initialState, {
   [addItem.type]: (state, action: PayloadAction<ItemProps>) => void ({
       ...state,
       inventoryItems: addItemToInventory(state.inventoryItems, action.payload),
-    opponents: fightAndUpdateOpponents(state.playerPosition, state.opponents, action.payload)
 
   })
 });

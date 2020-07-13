@@ -59,7 +59,7 @@ const Map = ({ gameMap, playerPosition, itemsPosition, itemsOnMap, changeMap, ad
   )
 };
 
-const mapStateToProps = ({ gameMap, playerPosition, itemsPosition, itemsOnMap, inventoryItems }: RootState) => ({
+const mapStateToProps = ({ gameMap, playerPosition, itemsPosition, itemsOnMap, inventoryItems, opponents }: RootState) => ({
   gameMap: gameMap,
   playerPosition: playerPosition,
   itemsPosition: itemsPosition,

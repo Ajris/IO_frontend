@@ -18,6 +18,6 @@ const getLevel = (character: CharacterProps, value: number) => {
 }
 
 const getFightFactor = (character: CharacterProps) => {
-    return character.exp + (character.inventory.itemProps.length * 3);
+    return character.exp + (character.inventory.length * 3);
 }
 
