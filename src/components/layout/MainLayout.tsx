@@ -1,11 +1,14 @@
 import React from 'react';
 import Map from '../map/Map'
-import Inventory, {InventoryProps} from "../inventory/Inventory";
+import Inventory from "../inventory/Inventory";
 import Character, {CharacterProps} from "../character/Character";
 import Location, {LocationProps} from "../location/Location";
+import RootState, { Position } from "../../store/rootState";
+import { ItemProps } from '../inventory/Item';
+import { connect } from 'react-redux';
 
 export interface MainLayoutProps {
-    inventoryProps: InventoryProps;
+    inventoryProps: ItemProps[];
     characterProps: CharacterProps;
     locationProps: LocationProps;
 };
@@ -13,7 +16,7 @@ export interface MainLayoutProps {
 const MainLayout = (mainLayoutProps: MainLayoutProps) => {
     return (
     <div className="main-layout">
-        <Map />
+        <Map/>
         <div>
             <Character {...mainLayoutProps.characterProps}/>
             <Inventory {...mainLayoutProps.inventoryProps}/>
@@ -23,4 +26,8 @@ const MainLayout = (mainLayoutProps: MainLayoutProps) => {
     )
 }
 
-export default MainLayout;
+const mapStateToProps = ({ inventoryItems }: RootState) => ({
+    inventoryProps: inventoryItems,
+  });
+
+export default connect(mapStateToProps)(MainLayout);

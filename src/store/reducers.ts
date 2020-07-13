@@ -22,6 +22,7 @@ export const initialState: RootState = {
   gameMap: getGameMap([[2,2]]),
   playerPosition: [0, 0],
   itemsPosition: [[2,2]],
+  itemsOnMap: [{name: "itemik", color: "red", position: [2,2]}],
   inventoryItems: []
 };
 
@@ -63,11 +64,10 @@ const addItemToInventory = (inventoryItems: ItemProps[], item: ItemProps) => {
     return inventoryItems;
 }
 
-const deleteItem = (map: Tile[][], itemsPos: Position[], newPos: Position) => {
-    var tile: Tile = map[newPos[0]][newPos[1]]
-    
+const deleteItem = (map: Tile[][], items: ItemProps[], itemsPos: Position[], inventoryItems: ItemProps[], newPos: Position) => {
     map[newPos[0]][newPos[1]] = Tile.Floor;
-    itemsPos.pop()
+    items.pop();
+    itemsPos.pop();
     
     return map;
 }
@@ -84,9 +84,9 @@ export const rootReducer = createReducer(initialState, {
   }),
   [deleteItemFromMap.type]: (state, action: PayloadAction<Position>) => void ({
     ...state,
-    gameMap: deleteItem(state.gameMap, state.itemsPosition, action.payload)
+    gameMap: deleteItem(state.gameMap, state.itemsOnMap, state.itemsPosition, state.inventoryItems, action.payload)
   }),
-  [addItem.type]: (state, action: PayloadAction<ItemProps>) => ({
+  [addItem.type]: (state, action: PayloadAction<ItemProps>) => void ({
       ...state,
       inventoryItems: addItemToInventory(state.inventoryItems, action.payload)
   })

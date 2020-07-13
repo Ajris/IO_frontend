@@ -7,11 +7,7 @@ import {ItemBonusType} from "./model/itemBonusType";
 function App() {
     return (
         <div className="App">
-            <MainLayout inventoryProps={{
-                itemProps: [
-                    {name: "itemik", color: "red", image: "", bonusType: ItemBonusType.DAMAGE, value: 10},
-                    {name: "mieczyk", color: "yellow", image: "", bonusType: ItemBonusType.DEFENSE, value: 20}]
-            }}
+            <MainLayout
                         characterProps={{name: "Character"}}
                         locationProps={{name: "Location"}}/>
             <Control/>

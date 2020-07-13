@@ -12,6 +12,7 @@ export default interface RootState {
   gameState: GameState;
   gameMap: Tile[][];
   playerPosition: Position;
-  itemsPosition: Position[]; 
+  itemsPosition: Position[];
+  itemsOnMap: ItemProps[];
   inventoryItems: ItemProps[];
 }
