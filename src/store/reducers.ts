@@ -10,7 +10,7 @@ import {OpponentProps, Opponents} from "../components/opponent/Opponent";
 const getRandomTile = () => (Math.random() > 0.7 ? Tile.Wall : Tile.Floor);
 
 const getGameMap = (itemPositions: Position[]) => {
-  const map: (Tile.Floor | Tile.Wall | Tile.Item)[][] = Array.from(Array(5), _ => Array.from(Array(6), _ => getRandomTile()));
+  const map: (Tile.Floor | Tile.Wall | Tile.Item)[][] = Array.from(Array(7), _ => Array.from(Array(7), _ => getRandomTile()));
   itemPositions.forEach(position => {
     const[x, y] = position;
     map[x][y] = Tile.Item;
