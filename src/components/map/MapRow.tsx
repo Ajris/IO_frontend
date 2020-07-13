@@ -26,9 +26,9 @@ const getTileColor = (tile: Tile): string => {
 const getTileItemProps = (tile: Tile): ItemProps => {
   switch (tile) {
     case Tile.Item:
-      return {name: "itemik", color: "red", image: "", bonusType: ItemBonusType.DAMAGE, value: 10};
+      return {name: "itemik", color: "red", position: [2,2], bonusType: ItemBonusType.DAMAGE, value: 10};
     default:
-      return {name: "", color: "", image: ""};
+      return {name: "", color: ""};
   }
 };
 
@@ -36,7 +36,7 @@ const getTileItemProps = (tile: Tile): ItemProps => {
 export default ({ tiles }: MapRowProps) => {
   return (
     <div className="map-row">
-      { tiles.map(tile => <MapTile color={getTileColor(tile)} itemProps={getTileItemProps(tile)}/>) }
+      {tiles.map((tile, key) => <MapTile key={key} color={getTileColor(tile)} itemProps={getTileItemProps(tile)}/>)}
     </div>
   );
 }
