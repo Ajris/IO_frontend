@@ -23,6 +23,8 @@ const getTileColor = (tile: Tile): string => {
       return "white"
     case Tile.Opponent:
       return "pink"
+    case Tile.Npc:
+      return "green"
   }
 };
 

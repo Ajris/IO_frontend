@@ -1,5 +1,6 @@
 import {Opponents} from "../components/opponent/Opponent";
 import {ItemProps} from "../components/inventory/Item";
+import {NpcProps} from "../components/npc/Npc";
 import {Tile} from "../model/tile";
 
 export enum GameState {
@@ -16,5 +17,6 @@ export default interface RootState {
   itemsPosition: Position[];
   itemsOnMap: ItemProps[];
   inventoryItems: ItemProps[];
-  opponents: Opponents
+  opponents: Opponents;
+  npcs: NpcProps[];
 }

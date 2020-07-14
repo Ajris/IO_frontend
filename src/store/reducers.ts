@@ -6,6 +6,7 @@ import { Direction } from "../model/direction";
 import { Tile } from "../model/tile";
 import {ItemProps} from "../components/inventory/Item";
 import {OpponentProps, Opponents} from "../components/opponent/Opponent";
+import {NpcProps} from "../components/npc/Npc";
 
 const getRandomTile = () => (Math.random() > 0.7 ? Tile.Wall : Tile.Floor);
 
@@ -26,7 +27,8 @@ export const initialState: RootState = {
   itemsPosition: [[2,2]],
   itemsOnMap: [{name: "itemik", color: "red", position: [2,2]}],
   inventoryItems: [],
-  opponents: {opponents: [{position: [2, 3], fightFactor: 10}]}
+  opponents: {opponents: [{position: [2, 3], fightFactor: 10}]},
+  npcs: [{position: [4, 4], text: "Hello!"}]
 };
 
 const canMoveTo = (map: Tile[][], position: Position): boolean => {
@@ -88,6 +90,15 @@ const fightAndUpdateOpponents = (position: Position,
     return {opponents: newOpponents}
 }
 
+const npcInteract = (position: Position, npcs: NpcProps[], direction:Direction): NpcProps[] => {
+    const newPos = positionAfterMovement(position, direction);
+    const npc = npcs.filter(n => n.position[0] === newPos[0] && n.position[1] === newPos[1])[0];
+    if(npc) {
+        window.alert(npc.text);
+    }
+    return npcs;
+}
+
 export const rootReducer = createReducer(initialState, {
   [setGameState.type]: (state, action: PayloadAction<GameState>) => ({
     ...state,
@@ -96,7 +107,8 @@ export const rootReducer = createReducer(initialState, {
   [movePlayer.type]: (state, action: PayloadAction<Direction>) => ({
     ...state,
     playerPosition: changePlayerPosition(state.gameMap, state.playerPosition, action.payload),
-    opponents: fightAndUpdateOpponents(state.playerPosition, state.opponents, action.payload)
+    opponents: fightAndUpdateOpponents(state.playerPosition, state.opponents, action.payload),
+    npcs: npcInteract(state.playerPosition, state.npcs, action.payload)
   }),
   [deleteItemFromMap.type]: (state, action: PayloadAction<Position>) => void ({
     ...state,
@@ -105,6 +117,5 @@ export const rootReducer = createReducer(initialState, {
   [addItem.type]: (state, action: PayloadAction<ItemProps>) => void ({
       ...state,
       inventoryItems: addItemToInventory(state.inventoryItems, action.payload)
-
   })
 });
