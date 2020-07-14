@@ -26,7 +26,8 @@ export const initialState: RootState = {
   itemsPosition: [[2,2]],
   itemsOnMap: [{name: "itemik", color: "red", position: [2,2]}],
   inventoryItems: [],
-  opponents: {opponents: [{position: [2, 3], fightFactor: 10}]}
+  opponents: {opponents: [{position: [2, 3], fightFactor: 10}]},
+  npcs: [{position: [4, 4], text: "Hello!"}]
 };
 
 const canMoveTo = (map: Tile[][], position: Position): boolean => {
@@ -105,6 +106,5 @@ export const rootReducer = createReducer(initialState, {
   [addItem.type]: (state, action: PayloadAction<ItemProps>) => void ({
       ...state,
       inventoryItems: addItemToInventory(state.inventoryItems, action.payload)
-
   })
 });

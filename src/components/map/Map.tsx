@@ -3,11 +3,12 @@ import { connect } from "react-redux";
 import MapRow from "./MapRow";
 import { Tile } from "../../model/tile";
 import RootState, { Position } from "../../store/rootState";
-import { deleteItemFromMap, addItem} from "../../store/actions";
+import { deleteItemFromMap, addItem, npcInteract} from "../../store/actions";
 import { Dispatch } from "../../store";
 import { ItemProps } from "../inventory/Item";
 import { MainLayoutProps } from "../layout/MainLayout";
 import {Opponents} from "../opponent/Opponent";
+import {NpcProps} from "../npc/Npc";
         
 interface MapProps {
   gameMap: Tile[][],
@@ -18,6 +19,7 @@ interface MapProps {
   opponents: Opponents,
   changeMap: (newPosition: Position) => void;
   addToInventory: (item: ItemProps) => void;
+  npcs: NpcProps[];
 }
 
 const placeTile = (gameMap: Tile[][], position: Position, tileType: Tile) => {
@@ -38,7 +40,19 @@ const placeOpponents = (gameMap: Tile[][], opponents: Opponents) => {
     return clonedMap;
 };
 
-const Map = ({ gameMap, playerPosition, itemsPosition, itemsOnMap, changeMap, addToInventory, opponents }: MapProps) => {
+const placeNpcs = (gameMap: Tile[][], npcs: NpcProps[]) => {
+    var clonedMap = gameMap.map(function (arr) {
+        return arr.slice();
+    });
+
+    npcs.forEach(npc =>
+        clonedMap[npc.position[0]][npc.position[1]] = Tile.Npc
+    )
+
+    return clonedMap;
+};
+
+const Map = ({ gameMap, playerPosition, itemsPosition, itemsOnMap, changeMap, addToInventory, opponents, npcs }: MapProps) => {
   let mapWithPlayer = placeTile(gameMap, playerPosition, Tile.Player);
   itemsPosition.forEach(position => mapWithPlayer = placeTile(mapWithPlayer, position, Tile.Item));
   itemsOnMap.forEach(item => {
@@ -52,20 +66,22 @@ const Map = ({ gameMap, playerPosition, itemsPosition, itemsOnMap, changeMap, ad
     });
     
     let mapWithOpponent = placeOpponents(mapWithPlayer, opponents)
+    const mapWithNpcXd = placeNpcs(mapWithOpponent, npcs)
   return (
   <div className="map">
-    {mapWithOpponent.map(row => <MapRow tiles={row} />)}
+    {mapWithNpcXd.map(row => <MapRow tiles={row} />)}
   </div>
   )
 };
 
-const mapStateToProps = ({ gameMap, playerPosition, itemsPosition, itemsOnMap, inventoryItems, opponents }: RootState) => ({
+const mapStateToProps = ({ gameMap, playerPosition, itemsPosition, itemsOnMap, inventoryItems, opponents, npcs }: RootState) => ({
   gameMap: gameMap,
   playerPosition: playerPosition,
   itemsPosition: itemsPosition,
   itemsOnMap: itemsOnMap,
   itemsInInv: inventoryItems,
-  opponents: opponents
+  opponents: opponents,
+  npcs: npcs
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
@@ -74,6 +90,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
     },
     addToInventory: (item: ItemProps) => {
         dispatch(addItem(item));
+    },
+    interactWithNpc: (npc: NpcProps) => {
+        dispatch(npcInteract(npc));
     }
 });
 

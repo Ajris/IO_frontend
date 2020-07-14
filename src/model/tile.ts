@@ -3,6 +3,7 @@ export enum Tile {
   Floor,
   Player,
   Item,
-  Opponent
+  Opponent,
+  Npc
 };
 
