@@ -14,24 +14,39 @@ interface MapRowProps {
 const getTileColor = (tile: Tile): string => {
   switch (tile) {
     case Tile.Wall:
-      return "black";
+      return "gray";
     case Tile.Floor:
-      return "white";
+      return "gray";
     case Tile.Player:
-      return "blue";
+      return "#454545ff";
     case Tile.Item:
-      return "white"
+      return "#454545ff";
     case Tile.Opponent:
-      return "pink"
+      return "#454545ff"
   }
 };
+
+const getTileImage = (tile: Tile): string => {
+  switch (tile) {
+    case Tile.Wall:
+      return "/graphics/wall.png";
+    case Tile.Floor:
+      return "/graphics/floor.PNG";
+    case Tile.Player:
+      return "/graphics/player.PNG";
+    case Tile.Item:
+      return "/graphics/floor.PNG"; // because item is above item tile
+    case Tile.Opponent:
+      return "/graphics/opponent.PNG"
+  }
+}
 
 const getTileItemProps = (tile: Tile, itemsOnMap: ItemProps[]): ItemProps => {
   switch (tile) {
     case Tile.Item:
       return itemsOnMap[0];
     default:
-      return {name: "", color: ""};
+      return {name: "", image:""};
   }
 };
 
@@ -42,7 +57,7 @@ const mapStateToProps = ({itemsOnMap }: RootState) => ({
 const MapRow = ({tiles, itemsOnMap} : MapRowProps) => {
   return (
     <div className="map-row">
-      {tiles.map((tile, key) => <MapTile key={key} color={getTileColor(tile)} itemProps={getTileItemProps(tile, itemsOnMap)}/>)}
+      {tiles.map((tile, key) => <MapTile key={key} color={getTileColor(tile)} image={getTileImage(tile)} itemProps={getTileItemProps(tile, itemsOnMap)}/>)}
     </div>
   );
 }

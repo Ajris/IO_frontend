@@ -10,7 +10,7 @@ import {OpponentProps, Opponents} from "../components/opponent/Opponent";
 const getRandomTile = () => (Math.random() > 0.7 ? Tile.Wall : Tile.Floor);
 
 const getGameMap = (itemPositions: Position[]) => {
-  const map: (Tile.Floor | Tile.Wall | Tile.Item)[][] = Array.from(Array(7), _ => Array.from(Array(7), _ => getRandomTile()));
+  const map: (Tile.Floor | Tile.Wall | Tile.Item)[][] = Array.from(Array(15), _ => Array.from(Array(20), _ => getRandomTile()));
   itemPositions.forEach(position => {
     const[x, y] = position;
     map[x][y] = Tile.Item;
@@ -24,7 +24,7 @@ export const initialState: RootState = {
   gameMap: getGameMap([[2,2]]),
   playerPosition: [0, 0],
   itemsPosition: [[2,2]],
-  itemsOnMap: [{name: "itemik", color: "red", position: [2,2]}],
+  itemsOnMap: [{name: "itemik", image: "/graphics/item_red.PNG", position: [2,2]}],
   inventoryItems: [],
   opponents: {opponents: [{position: [2, 3], fightFactor: 10}]}
 };
