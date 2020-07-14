@@ -1,34 +1,28 @@
-
-import {createReducer, PayloadAction, createStore} from "@reduxjs/toolkit";
+import {createReducer, PayloadAction} from "@reduxjs/toolkit";
 import RootState, { GameState, Position } from "./rootState";
 import {setGameState, movePlayer, addItem, deleteItemFromMap} from "./actions";
 import { Direction } from "../model/direction";
 import { Tile } from "../model/tile";
 import {ItemProps} from "../components/inventory/Item";
-import {OpponentProps, Opponents} from "../components/opponent/Opponent";
+import { Opponents } from "../components/opponent/Opponent";
 import {NpcProps} from "../components/npc/Npc";
 import {EndingConditionsProps} from "../components/ending/EndingConditionsProps";
+import config from '../game-config.json';
 
-const getRandomTile = () => (Math.random() > 0.7 ? Tile.Wall : Tile.Floor);
-
-const getGameMap = (itemPositions: Position[]) => {
-  const map: (Tile.Floor | Tile.Wall | Tile.Item)[][] = Array.from(Array(7), _ => Array.from(Array(7), _ => getRandomTile()));
-  itemPositions.forEach(position => {
-    const[x, y] = position;
-    map[x][y] = Tile.Item;
-  });
-
-  return map;
-}
+const getGameMap = (encodedMap: string[]) => (
+  encodedMap.map(encodedRow => (
+    Array.from(encodedRow).map(tile => (tile === "1" ? Tile.Wall : Tile.Floor))
+  ))
+);
 
 export const initialState: RootState = {
   gameState: GameState.IN_PROGRESS,
-  gameMap: getGameMap([[2,2], [3,3]]),
-  playerPosition: [0, 0],
-  itemsPosition: [[2,2], [3,3]],
+  gameMap: getGameMap(config.map),
+  playerPosition: config.playerPosition as Position,
+  itemsPosition: config.items as Position[],
   itemsOnMap: [{name: "itemik", color: "red", position: [2,2]}, {name: "item", color: "yellow", position: [3,3]}],
   inventoryItems: [],
-  opponents: {opponents: [{position: [2, 3], fightFactor: 10}]},
+  opponents: {opponents: config.mobs},
   npcs: [{position: [4, 4], text: "Hello!"}],
     endingConditions: {itemConditions: [{name: "itemik", color: "red", position: [2,2]}, {name: "item", color: "yellow", position: [3,3]}]}
 };

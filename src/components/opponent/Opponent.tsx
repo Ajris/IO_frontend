@@ -5,6 +5,6 @@ export interface Opponents {
 }
 
 export interface OpponentProps {
-    position: Position
-    fightFactor: number;
+    position: number[]
+    fightFactor: number
 }

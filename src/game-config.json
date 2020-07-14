@@ -1,0 +1,50 @@
+{
+	"map": [
+		"1111111111",
+		"1000000001",
+		"1000000001",
+		"1000000001",
+		"1000000001",
+		"1000000001",
+		"1000000001",
+		"1000000001",
+		"1000000001",
+		"1000000001",
+		"1000000001",
+		"1111111111"
+	],
+	"playerPosition": [1, 1],
+	"items": [
+		[3, 3],
+		[5, 7]
+	],
+	"mobs": [
+		{
+			"position": [4, 4],
+			"fightFactor": 10
+		},
+		{
+			"position": [3, 2],
+			"fightFactor": 5
+		}
+	],
+	"questions": [
+		{
+			"content": "2+2=?",
+			"answer": "4"
+		},
+		{
+			"content": "'2'+2=?",
+			"answer": "22"
+		},
+		{
+			"content": "What is the meaning of life?",
+			"answer": "42"
+		},
+		{
+			"content": "Is it possible to reverse a Unicode string?",
+			"answer": "No"
+		}
+
+	]
+}
