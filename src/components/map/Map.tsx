@@ -90,9 +90,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
     },
     addToInventory: (item: ItemProps) => {
         dispatch(addItem(item));
-    },
-    interactWithNpc: (npc: NpcProps) => {
-        dispatch(npcInteract(npc));
     }
 });
 
