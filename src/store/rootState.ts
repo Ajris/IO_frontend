@@ -2,6 +2,7 @@ import {Opponents} from "../components/opponent/Opponent";
 import {ItemProps} from "../components/inventory/Item";
 import {NpcProps} from "../components/npc/Npc";
 import {Tile} from "../model/tile";
+import {EndingConditionsProps} from "../components/ending/EndingConditionsProps";
 
 export enum GameState {
   IN_PROGRESS,
@@ -19,4 +20,5 @@ export default interface RootState {
   inventoryItems: ItemProps[];
   opponents: Opponents;
   npcs: NpcProps[];
+  endingConditions: EndingConditionsProps;
 }

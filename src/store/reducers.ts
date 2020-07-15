@@ -7,6 +7,7 @@ import { Tile } from "../model/tile";
 import {ItemProps} from "../components/inventory/Item";
 import {OpponentProps, Opponents} from "../components/opponent/Opponent";
 import {NpcProps} from "../components/npc/Npc";
+import {EndingConditionsProps} from "../components/ending/EndingConditionsProps";
 
 const getRandomTile = () => (Math.random() > 0.7 ? Tile.Wall : Tile.Floor);
 
@@ -22,13 +23,14 @@ const getGameMap = (itemPositions: Position[]) => {
 
 export const initialState: RootState = {
   gameState: GameState.IN_PROGRESS,
-  gameMap: getGameMap([[2,2]]),
+  gameMap: getGameMap([[2,2], [3,3]]),
   playerPosition: [0, 0],
-  itemsPosition: [[2,2]],
-  itemsOnMap: [{name: "itemik", color: "red", position: [2,2]}],
+  itemsPosition: [[2,2], [3,3]],
+  itemsOnMap: [{name: "itemik", color: "red", position: [2,2]}, {name: "item", color: "yellow", position: [3,3]}],
   inventoryItems: [],
   opponents: {opponents: [{position: [2, 3], fightFactor: 10}]},
-  npcs: [{position: [4, 4], text: "Hello!"}]
+  npcs: [{position: [4, 4], text: "Hello!"}],
+    endingConditions: {itemConditions: [{name: "itemik", color: "red", position: [2,2]}, {name: "item", color: "yellow", position: [3,3]}]}
 };
 
 const canMoveTo = (map: Tile[][], position: Position): boolean => {
@@ -99,6 +101,21 @@ const npcInteract = (position: Position, npcs: NpcProps[], direction:Direction):
     return npcs;
 }
 
+const endingInteract = (position: Position, endingConditionsProps: EndingConditionsProps, inventory: ItemProps[],direction: Direction): EndingConditionsProps => {
+    const newPos = positionAfterMovement(position, direction);
+    const arr = [...endingConditionsProps.itemConditions]
+    const itemOnNewPosition = endingConditionsProps.itemConditions.filter(n => n.position![0] === newPos[0] && n.position![1] === newPos[1])[0]
+    if(itemOnNewPosition != undefined){
+        var index = arr.indexOf(itemOnNewPosition);
+        arr.splice(index, 1);
+    }
+
+    if(arr && arr.length == 0){
+        window.alert("WIN")
+    }
+    return {itemConditions: arr};
+}
+
 export const rootReducer = createReducer(initialState, {
   [setGameState.type]: (state, action: PayloadAction<GameState>) => ({
     ...state,
@@ -108,7 +125,8 @@ export const rootReducer = createReducer(initialState, {
     ...state,
     playerPosition: changePlayerPosition(state.gameMap, state.playerPosition, action.payload),
     opponents: fightAndUpdateOpponents(state.playerPosition, state.opponents, action.payload),
-    npcs: npcInteract(state.playerPosition, state.npcs, action.payload)
+    npcs: npcInteract(state.playerPosition, state.npcs, action.payload),
+      endingConditions: endingInteract(state.playerPosition, state.endingConditions, state.inventoryItems,action.payload)
   }),
   [deleteItemFromMap.type]: (state, action: PayloadAction<Position>) => void ({
     ...state,
