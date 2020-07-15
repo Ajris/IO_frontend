@@ -2,7 +2,6 @@ import React from "react";
 import MapTile from "./MapTile";
 import {Tile} from "../../model/tile";
 import {ItemProps} from "../inventory/Item";
-import {ItemBonusType} from "../../model/itemBonusType";
 import RootState from "../../store/rootState";
 import { connect } from "react-redux";
 
@@ -18,7 +17,7 @@ const getTileColor = (tile: Tile): string => {
     case Tile.Floor:
       return "gray";
     case Tile.Player:
-      return "#454545ff";
+      return "#454545ff`";
     case Tile.Item:
       return "#454545ff";
     case Tile.Opponent:

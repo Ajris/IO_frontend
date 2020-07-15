@@ -19,12 +19,16 @@ const getGameMap = (itemPositions: Position[]) => {
   return map;
 }
 
+const getRandomImage = () : string => {
+    return Math.random() > 0.7 ? "/graphics/item_red.PNG" : (Math.random() < 0.3 ? "/graphics/item_blue.PNG" : "/graphics/item_green.PNG");
+}
+
 export const initialState: RootState = {
   gameState: GameState.IN_PROGRESS,
   gameMap: getGameMap([[2,2]]),
   playerPosition: [0, 0],
   itemsPosition: [[2,2]],
-  itemsOnMap: [{name: "itemik", image: "/graphics/item_red.PNG", position: [2,2]}],
+  itemsOnMap: [{name: "itemik", image: getRandomImage(), position: [2,2]}],
   inventoryItems: [],
   opponents: {opponents: [{position: [2, 3], fightFactor: 10}]}
 };
