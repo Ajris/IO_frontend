@@ -24,12 +24,21 @@
 		{
 			"name": "itemik",
 			"color": "red",
-			"position": [2,2]
+			"position": [2,2],
+			"image": "/graphics/item_green.PNG"
+		},
+		{
+			"name": "itemik",
+			"color": "blue",
+			"position": [2,3],
+			"image": "/graphics/item_green.PNG"
 		},
 		{
 			"name": "item",
 			"color": "yellow",
-			"position": [3,3]
+			"position": [3,3],
+			"image": "/graphics/item_green.PNG"
+
 		}
 	],
 	"mobs": [
