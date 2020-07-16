@@ -134,7 +134,7 @@ export const rootReducer = createReducer(initialState, {
     playerPosition: changePlayerPosition(state.gameMap, state.playerPosition, action.payload),
     opponents: fightAndUpdateOpponents(state.playerPosition, state.opponents, action.payload),
     npcs: npcInteract(state.playerPosition, state.npcs, action.payload),
-      endingConditions: endingInteract(state.playerPosition, state.endingConditions, state.items.inventoryItems, action.payload),
-      items: itemInteract(state.playerPosition, state.items, action.payload)
+    endingConditions: endingInteract(state.playerPosition, state.endingConditions, state.items.inventoryItems, action.payload),
+    items: itemInteract(state.playerPosition, state.items, action.payload)
   })
 });
