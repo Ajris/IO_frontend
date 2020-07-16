@@ -19,12 +19,12 @@ export const initialState: RootState = {
   gameState: GameState.IN_PROGRESS,
   gameMap: getGameMap(config.map),
   playerPosition: config.playerPosition as Position,
-  itemsPosition: config.items as Position[],
-  itemsOnMap: [{name: "itemik", color: "red", position: [2,2]}, {name: "item", color: "yellow", position: [3,3]}],
+  itemsPosition: config.items.map(item => item.position) as Position[],
+  itemsOnMap: config.items,
   inventoryItems: [],
   opponents: {opponents: config.mobs},
-  npcs: [{position: [4, 4], text: "Hello!"}],
-    endingConditions: {itemConditions: [{name: "itemik", color: "red", position: [2,2]}, {name: "item", color: "yellow", position: [3,3]}]}
+  npcs: config.npcs,
+  endingConditions: config.endingConditions,
 };
 
 const canMoveTo = (map: Tile[][], position: Position): boolean => {
