@@ -36,7 +36,7 @@ const getTileImage = (tile: Tile): string => {
     case Tile.Player:
       return "/graphics/player.PNG";
     case Tile.Item:
-      return "/graphics/floor.PNG"; // because item is above item tile
+      return "/graphics/item_green.PNG"; // because item is above item tile
     case Tile.Opponent:
       return "/graphics/opponent.PNG";
     case Tile.Npc:
