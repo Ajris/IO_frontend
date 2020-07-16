@@ -1,14 +1,23 @@
-import { Tile } from "../model/tile";
+import {Opponents} from "../components/opponent/Opponent";
+import {ItemProps} from "../components/inventory/Item";
+import {NpcProps} from "../components/npc/Npc";
+import {Tile} from "../model/tile";
+import {EndingConditionsProps} from "../components/ending/EndingConditionsProps";
+import {Items} from "./reducers";
 
 export enum GameState {
   IN_PROGRESS,
   FINISHED
 }
 
-export type PlayerPosition = [number, number];
+export type Position = [number, number];
 
 export default interface RootState {
-  gameState: GameState
-  gameMap: Tile[][]
-  playerPosition: PlayerPosition
+  gameState: GameState;
+  gameMap: Tile[][];
+  playerPosition: Position;
+  items: Items;
+  opponents: Opponents;
+  npcs: NpcProps[];
+  endingConditions: EndingConditionsProps;
 }
