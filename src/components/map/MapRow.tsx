@@ -55,8 +55,9 @@ const getTileItemProps = (tile: Tile, itemsOnMap: ItemProps[]): ItemProps => {
   }
 };
 
-const mapStateToProps = ({itemsOnMap }: RootState) => ({
-  itemsOnMap: itemsOnMap,
+
+const mapStateToProps = ({items }: RootState) => ({
+  itemsOnMap: items.itemsOnMap,
 });
 
 const MapRow = ({tiles, itemsOnMap} : MapRowProps) => {

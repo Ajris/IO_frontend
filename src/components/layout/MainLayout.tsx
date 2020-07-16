@@ -26,8 +26,8 @@ const MainLayout = (mainLayoutProps: MainLayoutProps) => {
     )
 }
 
-const mapStateToProps = ({ inventoryItems }: RootState) => ({
-    inventoryProps: inventoryItems,
+const mapStateToProps = ({ items }: RootState) => ({
+    inventoryProps: items.inventoryItems,
   });
 
 export default connect(mapStateToProps)(MainLayout);
