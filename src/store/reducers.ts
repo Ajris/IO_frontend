@@ -1,6 +1,6 @@
 import {createReducer, PayloadAction} from "@reduxjs/toolkit";
 import RootState, { GameState, Position } from "./rootState";
-import {setGameState, movePlayer, addItem, deleteItemFromMap} from "./actions";
+import {setGameState, movePlayer} from "./actions";
 import { Direction } from "../model/direction";
 import { Tile } from "../model/tile";
 import {ItemProps} from "../components/inventory/Item";
@@ -20,14 +20,20 @@ export const initialState: RootState = {
     gameState: GameState.IN_PROGRESS,
     gameMap: getGameMap(config.map),
     playerPosition: config.playerPosition as Position,
-    itemsPosition: config.items.map(item => item.position) as Position[],
-    itemsOnMap: config.items,
-    inventoryItems: [],
+    items: {
+        itemsOnMap: config.items,
+        inventoryItems: []
+    },
     opponents: {opponents: config.mobs},
     npcs: config.npcs,
     endingConditions: config.endingConditions,
     characterProps: config.characterProps,
 };
+
+export interface Items {
+    itemsOnMap: ItemProps[],
+    inventoryItems: ItemProps[]
+}
 
 const canMoveTo = (map: Tile[][], position: Position): boolean => {
     const [x, y] = position;
@@ -63,10 +69,6 @@ const changePlayerPosition = (map: Tile[][], position: Position,
   return canMoveTo(map, newPos) ? newPos : position;
 };
 
-const addItemToInventory = (inventoryItems: ItemProps[], item: ItemProps) => {
-    inventoryItems.push(item);
-    return inventoryItems;
-}
 
 const isFightWon = (opponents: Opponents, position: Position, characterProps: CharacterProps): boolean => {
     const opponent = opponents.opponents.filter(o => o.position[0] === position[0] && o.position[1] === position[1])[0];
@@ -78,14 +80,9 @@ const isFight = (opponents: Opponents, position: Position): boolean => {
     return opponents.opponents.filter(o => o.position[0] === position[0] && o.position[1] === position[1]).length !== 0;
 }
 
-const deleteItem = (map: Tile[][], items: ItemProps[], itemsPos: Position[], inventoryItems: ItemProps[], newPos: Position) => {
-    map[newPos[0]][newPos[1]] = Tile.Floor;
-    items.pop();
-    itemsPos.pop();
-    return map;
-}
-const fightAndUpdateOpponents = (map: Tile[][], position: Position,
-                                 opponents: Opponents, direction: Direction): Opponents => {
+
+const fightAndUpdateOpponents = (position: Position,
+                         opponents: Opponents, direction: Direction): Opponents => {
     const newPos = positionAfterMovement(position, direction);
     const newOpponents = opponents.opponents.filter(o => o.position[0] !== newPos[0] || o.position[1] !== newPos[1]);
     return {opponents: newOpponents};
@@ -116,10 +113,10 @@ const fightAndUpdateCharacter = (gameMap: any, position: Position, opponents: Op
     };
 }
 
-const npcInteract = (position: Position, npcs: NpcProps[], direction: Direction): NpcProps[] => {
+const npcInteract = (position: Position, npcs: NpcProps[], direction:Direction): NpcProps[] => {
     const newPos = positionAfterMovement(position, direction);
     const npc = npcs.filter(n => n.position[0] === newPos[0] && n.position[1] === newPos[1])[0];
-    if (npc) {
+    if(npc) {
         window.alert(npc.text);
     }
     return npcs;
@@ -129,7 +126,7 @@ const endingInteract = (position: Position, endingConditionsProps: EndingConditi
     const newPos = positionAfterMovement(position, direction);
     const arr = [...endingConditionsProps.itemConditions]
     const itemOnNewPosition = endingConditionsProps.itemConditions.filter(n => n.position![0] === newPos[0] && n.position![1] === newPos[1])[0]
-    if (itemOnNewPosition != undefined) {
+    if(itemOnNewPosition != undefined){
         var index = arr.indexOf(itemOnNewPosition);
         arr.splice(index, 1);
     }
@@ -141,10 +138,26 @@ const endingInteract = (position: Position, endingConditionsProps: EndingConditi
     if (arr && arr.length == 0) {
         window.alert("WIN")
     }
-
-
     return {itemConditions: arr};
 }
+
+const itemInteract = (position: Position, items: Items, direction: Direction): Items => {
+    const newPos = positionAfterMovement(position, direction);
+    const inventory: ItemProps[]= Object.assign([], items.inventoryItems);
+
+    items.itemsOnMap.forEach(item => {
+        if(item.position!![0] === newPos[0] && item.position!![1] === newPos[1]){
+            inventory.push(item);
+        }
+    });
+
+    const itemsAfterDelete = items.itemsOnMap.filter(item => item.position!![0] !== newPos[0] || item.position![1] !== newPos[1]);
+    console.log(inventory.length);
+    return {
+        itemsOnMap: itemsAfterDelete,
+        inventoryItems: inventory
+    };
+};
 
 export const rootReducer = createReducer(initialState, {
   [setGameState.type]: (state, action: PayloadAction<GameState>) => ({
@@ -152,19 +165,12 @@ export const rootReducer = createReducer(initialState, {
     gameState: action.payload
   }),
   [movePlayer.type]: (state, action: PayloadAction<Direction>) => ({
-      ...state,
+    ...state,
       playerPosition: changePlayerPosition(state.gameMap, state.playerPosition, action.payload),
       characterProps: fightAndUpdateCharacter(state.gameMap, state.playerPosition, state.opponents, action.payload, state.characterProps),
       opponents: fightAndUpdateOpponents(state.gameMap, state.playerPosition, state.opponents, action.payload),
       npcs: npcInteract(state.playerPosition, state.npcs, action.payload),
-      endingConditions: endingInteract(state.playerPosition, state.endingConditions, state.inventoryItems, action.payload, state.characterProps)
-  }),
-  [deleteItemFromMap.type]: (state, action: PayloadAction<Position>) => void ({
-    ...state,
-    gameMap: deleteItem(state.gameMap, state.itemsOnMap, state.itemsPosition, state.inventoryItems, action.payload)
-  }),
-  [addItem.type]: (state, action: PayloadAction<ItemProps>) => void ({
-      ...state,
-      inventoryItems: addItemToInventory(state.inventoryItems, action.payload)
+      endingConditions: endingInteract(state.playerPosition, state.endingConditions, state.inventoryItems, action.payload, state.characterProps),
+    items: itemInteract(state.playerPosition, state.items, action.payload)
   })
 });

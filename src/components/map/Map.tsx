@@ -3,22 +3,15 @@ import { connect } from "react-redux";
 import MapRow from "./MapRow";
 import { Tile } from "../../model/tile";
 import RootState, { Position } from "../../store/rootState";
-import { deleteItemFromMap, addItem } from "../../store/actions";
-import { Dispatch } from "../../store";
-import { ItemProps } from "../inventory/Item";
-import { MainLayoutProps } from "../layout/MainLayout";
 import {Opponents} from "../opponent/Opponent";
 import {NpcProps} from "../npc/Npc";
-        
+import {Items} from "../../store/reducers";
+
 interface MapProps {
   gameMap: Tile[][],
   playerPosition: Position,
-  itemsPosition: Position[],
-  itemsOnMap: ItemProps[],
-  itemsInInv: ItemProps[],
+  items: Items,
   opponents: Opponents,
-  changeMap: (newPosition: Position) => void;
-  addToInventory: (item: ItemProps) => void;
   npcs: NpcProps[];
 }
 
@@ -52,19 +45,10 @@ const placeNpcs = (gameMap: Tile[][], npcs: NpcProps[]) => {
     return clonedMap;
 };
 
-const Map = ({ gameMap, playerPosition, itemsPosition, itemsOnMap, changeMap, addToInventory, opponents, npcs }: MapProps) => {
+const Map = ({ gameMap, playerPosition, items, opponents, npcs }: MapProps) => {
   let mapWithPlayer = placeTile(gameMap, playerPosition, Tile.Player);
-  itemsPosition.forEach(position => mapWithPlayer = placeTile(mapWithPlayer, position, Tile.Item));
-  itemsOnMap.forEach(item => {
-        var position = item.position;
-        if(position !== undefined){
-            if(position[0] === playerPosition[0] && position[1] === playerPosition[1]) {
-                changeMap(playerPosition);
-                addToInventory(item);
-            }
-        }
-    });
-    
+  items.itemsOnMap.forEach(item => mapWithPlayer = placeTile(mapWithPlayer, [item.position!![0], item.position!![1]], Tile.Item));
+
     let mapWithOpponent = placeOpponents(mapWithPlayer, opponents)
     const mapWithNpcXd = placeNpcs(mapWithOpponent, npcs)
   return (
@@ -74,23 +58,13 @@ const Map = ({ gameMap, playerPosition, itemsPosition, itemsOnMap, changeMap, ad
   )
 };
 
-const mapStateToProps = ({ gameMap, playerPosition, itemsPosition, itemsOnMap, inventoryItems, opponents, npcs }: RootState) => ({
+const mapStateToProps = ({ gameMap, playerPosition, items, opponents, npcs }: RootState) => ({
   gameMap: gameMap,
   playerPosition: playerPosition,
-  itemsPosition: itemsPosition,
-  itemsOnMap: itemsOnMap,
-  itemsInInv: inventoryItems,
+  items: items,
   opponents: opponents,
   npcs: npcs
 });
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-    changeMap: (newPosition: Position) => {
-      dispatch(deleteItemFromMap(newPosition));
-    },
-    addToInventory: (item: ItemProps) => {
-        dispatch(addItem(item));
-    }
-});
 
-export default connect(mapStateToProps, mapDispatchToProps)(Map);
+export default connect(mapStateToProps)(Map);
