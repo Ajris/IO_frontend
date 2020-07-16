@@ -1,7 +1,13 @@
+body {
+	background-color: grey;
+}
+
 .map {
+
+	margin: auto;
 	display: flex;
 	flex-direction: column;
-	border: 3px solid red;
+	border: 3px solid black;
 }
 
 .map-row {
@@ -9,15 +15,19 @@
 }
 
 .map-tile {
-	width: 5vw;
-	height: 5vw;
+	width: 3vw;
+	height: 3vw;
+	background-repeat: no-repeat; /* Do not repeat the image */
+	background-size: cover; /* Resize the background image to cover the entire container */
 }
 
 .item {
 	width: 3vw;
 	height: 3vw;
-	margin: 1vw;
-	font-size: 1vw;
+	/*margin: 1vw;*/
+	font-size: 0vw;
+	background-repeat: no-repeat; /* Do not repeat the image */
+	background-size: cover; /* Resize the background image to cover the entire container */
 }
 
 .main-layout {
@@ -26,15 +36,15 @@
 }
 
 .inventory {
-	background-color: green;
+	background-color: darkgrey;
 	width: 10vw;
 	height: 10vw;
 	text-align: center;
 	margin-left: 10px;
-	margin-top: 10px;
 }
+
 .location {
-	background-color: blue;
+	background-color: dimgray;
 	width: 10vw;
 	height: 10vw;
 	text-align: center;
@@ -43,7 +53,7 @@
 }
 
 .character {
-	background-color: yellow;
+	background-color: lightgray;
 	width: 10vw;
 	height: 10vw;
 	text-align: center;
@@ -53,6 +63,6 @@
 .btn {
 	border: 10px black;
 	background-color: red;
-	font-size: 16px;
+	font-size: 0px;
 	cursor: pointer;
 }

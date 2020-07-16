@@ -15,6 +15,10 @@ const getGameMap = (encodedMap: string[]) => (
   ))
 );
 
+const getRandomImage = () : string => {
+    return Math.random() > 0.7 ? "/graphics/item_red.PNG" : (Math.random() < 0.3 ? "/graphics/item_blue.PNG" : "/graphics/item_green.PNG");
+}
+
 export const initialState: RootState = {
   gameState: GameState.IN_PROGRESS,
   gameMap: getGameMap(config.map),

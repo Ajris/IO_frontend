@@ -3,15 +3,15 @@ import {ItemBonusType} from "../../model/itemBonusType";
 
 export interface ItemProps {
     name: string;
-    color: string;
     position?: number[];
+    image: string;
     bonusType?: ItemBonusType;
     value?: number;
 }
 
 const ItemView = (itemProps: ItemProps) => {
     return (
-        <div className="item" style={{backgroundColor: itemProps.color}}>
+        <div className="item" style={{backgroundImage: `url(${itemProps.image})`}}>
             {itemProps.name}
         </div>
     )
