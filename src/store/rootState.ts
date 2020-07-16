@@ -3,6 +3,7 @@ import {ItemProps} from "../components/inventory/Item";
 import {NpcProps} from "../components/npc/Npc";
 import {Tile} from "../model/tile";
 import {EndingConditionsProps} from "../components/ending/EndingConditionsProps";
+import {Items} from "./reducers";
 
 export enum GameState {
   IN_PROGRESS,
@@ -15,9 +16,7 @@ export default interface RootState {
   gameState: GameState;
   gameMap: Tile[][];
   playerPosition: Position;
-  itemsPosition: Position[];
-  itemsOnMap: ItemProps[];
-  inventoryItems: ItemProps[];
+  items: Items;
   opponents: Opponents;
   npcs: NpcProps[];
   endingConditions: EndingConditionsProps;
