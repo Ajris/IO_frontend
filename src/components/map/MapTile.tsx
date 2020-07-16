@@ -3,13 +3,12 @@ import ItemView, {ItemProps} from "../inventory/Item";
 
 export interface MapTileProps {
   color: string;
-  image: string;
   itemProps: ItemProps;
 };
 
-export default ({color, image, itemProps }: MapTileProps) => {
+export default ({ color, itemProps }: MapTileProps) => {
   return (
-    <div className="map-tile" style={{ backgroundColor: color, backgroundImage: `url(${image})`}}>
+    <div className="map-tile" style={{backgroundColor: color}}>
       <ItemView {...itemProps}/>
     </div>
   );
