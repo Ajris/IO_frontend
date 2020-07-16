@@ -4,7 +4,7 @@ import {ItemBonusType} from "../../model/itemBonusType";
 export interface ItemProps {
     name: string;
     color: string;
-    position?: [number, number];
+    position?: number[];
     bonusType?: ItemBonusType;
     value?: number;
 }
