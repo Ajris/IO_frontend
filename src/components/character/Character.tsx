@@ -1,9 +1,11 @@
 import React from 'react';
+import {ItemProps} from "../inventory/Item";
 
 export interface CharacterProps {
         name: string;
         lifes: number;
         exp: number;
+        inventory: ItemProps[];
 }
 
 

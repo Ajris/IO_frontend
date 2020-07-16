@@ -5,8 +5,6 @@ import { connect } from "react-redux";
 
 
 const Inventory = (itemProps: ItemProps[]) => {
-    console.log(itemProps.length);
-    console.log("AAAAAAA");
     return (
         <div className="inventory">
             Inventory
