@@ -11,6 +11,7 @@ export interface CharacterProps {
 
 
 const CharacterView = (characterProps: CharacterProps) => {
+    console.log(characterProps.name)
     return (
         <div className="character">
             <div>Name: {characterProps.name}</div>

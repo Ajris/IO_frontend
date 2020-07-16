@@ -6,8 +6,7 @@ import './App.css';
 function App() {
     return (
         <div className="App">
-            <MainLayout characterProps={{name: "jacek", lifes: 1, exp: 2, inventory: []}}
-                        locationProps={{name: "Location"}}/>
+            <MainLayout locationProps={{name: "Location"}}/>
             <Control/>
         </div>
     )

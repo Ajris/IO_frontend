@@ -3,6 +3,7 @@ import {ItemProps} from "../components/inventory/Item";
 import {NpcProps} from "../components/npc/Npc";
 import {Tile} from "../model/tile";
 import {EndingConditionsProps} from "../components/ending/EndingConditionsProps";
+import {CharacterProps} from "../components/character/Character";
 import {Items} from "./reducers";
 
 export enum GameState {
@@ -20,4 +21,5 @@ export default interface RootState {
   opponents: Opponents;
   npcs: NpcProps[];
   endingConditions: EndingConditionsProps;
+  characterProps: CharacterProps;
 }
