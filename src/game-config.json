@@ -5,15 +5,21 @@
 		"1000000001",
 		"1000000001",
 		"1000000001",
-		"1000000001",
-		"1000000001",
-		"1000000001",
-		"1000000001",
+		"1111000001",
+		"1001000001",
+		"1001010001",
+		"1001110001",
 		"1000000001",
 		"1000000001",
 		"1111111111"
 	],
 	"playerPosition": [1, 1],
+	"characterProps":{
+		"name": "player",
+		"lifes": 2,
+		"exp": 10,
+		"inventory": []
+	},
 	"items": [
 		{
 			"name": "itemik",
@@ -28,18 +34,26 @@
 	],
 	"mobs": [
 		{
-			"position": [4, 4],
+			"position": [4, 5],
 			"fightFactor": 10
 		},
 		{
 			"position": [3, 2],
 			"fightFactor": 5
+		},
+		{
+			"position": [5, 5],
+			"fightFactor": 20
+		},
+		{
+			"position": [6, 2],
+			"fightFactor": 10
 		}
 	],
 	"npcs": [
 		{
 			"position": [4, 4],
-			"text": "Hello!"
+			"text": "Zbierz wszystkie itemy aby wygrac grę"
 		}
 	],
 	"questions": [

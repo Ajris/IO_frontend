@@ -26,7 +26,8 @@ const MainLayout = (mainLayoutProps: MainLayoutProps) => {
     )
 }
 
-const mapStateToProps = ({ inventoryItems }: RootState) => ({
+const mapStateToProps = ({ characterProps, inventoryItems }: RootState) => ({
+    characterProps: characterProps,
     inventoryProps: inventoryItems,
   });
 

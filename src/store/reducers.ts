@@ -4,10 +4,11 @@ import {setGameState, movePlayer, addItem, deleteItemFromMap} from "./actions";
 import { Direction } from "../model/direction";
 import { Tile } from "../model/tile";
 import {ItemProps} from "../components/inventory/Item";
-import { Opponents } from "../components/opponent/Opponent";
+import {OpponentProps, Opponents} from "../components/opponent/Opponent";
 import {NpcProps} from "../components/npc/Npc";
 import {EndingConditionsProps} from "../components/ending/EndingConditionsProps";
 import config from '../game-config.json';
+import {CharacterProps} from "../components/character/Character";
 
 const getGameMap = (encodedMap: string[]) => (
   encodedMap.map(encodedRow => (
@@ -16,15 +17,16 @@ const getGameMap = (encodedMap: string[]) => (
 );
 
 export const initialState: RootState = {
-  gameState: GameState.IN_PROGRESS,
-  gameMap: getGameMap(config.map),
-  playerPosition: config.playerPosition as Position,
-  itemsPosition: config.items.map(item => item.position) as Position[],
-  itemsOnMap: config.items,
-  inventoryItems: [],
-  opponents: {opponents: config.mobs},
-  npcs: config.npcs,
-  endingConditions: config.endingConditions,
+    gameState: GameState.IN_PROGRESS,
+    gameMap: getGameMap(config.map),
+    playerPosition: config.playerPosition as Position,
+    itemsPosition: config.items.map(item => item.position) as Position[],
+    itemsOnMap: config.items,
+    inventoryItems: [],
+    opponents: {opponents: config.mobs},
+    npcs: config.npcs,
+    endingConditions: config.endingConditions,
+    characterProps: config.characterProps,
 };
 
 const canMoveTo = (map: Tile[][], position: Position): boolean => {
@@ -66,47 +68,81 @@ const addItemToInventory = (inventoryItems: ItemProps[], item: ItemProps) => {
     return inventoryItems;
 }
 
+const isFightWon = (opponents: Opponents, position: Position, characterProps: CharacterProps): boolean => {
+    const opponent = opponents.opponents.filter(o => o.position[0] === position[0] && o.position[1] === position[1])[0];
+
+    return characterProps.exp > opponent.fightFactor;
+}
+
 const isFight = (opponents: Opponents, position: Position): boolean => {
-  const [x, y] = position
-  return opponents.opponents.filter(o => o.position[0] === x && o.position[1] === y).length !== 0
+    return opponents.opponents.filter(o => o.position[0] === position[0] && o.position[1] === position[1]).length !== 0;
 }
 
 const deleteItem = (map: Tile[][], items: ItemProps[], itemsPos: Position[], inventoryItems: ItemProps[], newPos: Position) => {
     map[newPos[0]][newPos[1]] = Tile.Floor;
     items.pop();
     itemsPos.pop();
-    
     return map;
 }
-const fightAndUpdateOpponents = (position: Position,
-                         opponents: Opponents, direction: Direction): Opponents => {
+const fightAndUpdateOpponents = (map: Tile[][], position: Position,
+                                 opponents: Opponents, direction: Direction): Opponents => {
     const newPos = positionAfterMovement(position, direction);
-
     const newOpponents = opponents.opponents.filter(o => o.position[0] !== newPos[0] || o.position[1] !== newPos[1]);
-    return {opponents: newOpponents}
+    return {opponents: newOpponents};
 }
 
-const npcInteract = (position: Position, npcs: NpcProps[], direction:Direction): NpcProps[] => {
+const fightAndUpdateCharacter = (gameMap: any, position: Position, opponents: Opponents, direction: Direction, characterProps: CharacterProps): CharacterProps => {
+    const newPos = positionAfterMovement(position, direction);
+    let newExp = characterProps.exp
+    let newLifes = characterProps.lifes
+
+    if (isFight(opponents, newPos)) {
+        if (isFightWon(opponents, newPos, characterProps)) {
+            window.alert("You won fight")
+            newExp += 10;
+        } else {
+            window.alert("You lost fight")
+            newLifes -= 1;
+        }
+    }
+
+
+
+    return {
+        name: characterProps.name,
+        exp: newExp,
+        lifes: newLifes,
+        inventory: characterProps.inventory
+    };
+}
+
+const npcInteract = (position: Position, npcs: NpcProps[], direction: Direction): NpcProps[] => {
     const newPos = positionAfterMovement(position, direction);
     const npc = npcs.filter(n => n.position[0] === newPos[0] && n.position[1] === newPos[1])[0];
-    if(npc) {
+    if (npc) {
         window.alert(npc.text);
     }
     return npcs;
 }
 
-const endingInteract = (position: Position, endingConditionsProps: EndingConditionsProps, inventory: ItemProps[],direction: Direction): EndingConditionsProps => {
+const endingInteract = (position: Position, endingConditionsProps: EndingConditionsProps, inventory: ItemProps[], direction: Direction, characterProps: CharacterProps): EndingConditionsProps => {
     const newPos = positionAfterMovement(position, direction);
     const arr = [...endingConditionsProps.itemConditions]
     const itemOnNewPosition = endingConditionsProps.itemConditions.filter(n => n.position![0] === newPos[0] && n.position![1] === newPos[1])[0]
-    if(itemOnNewPosition != undefined){
+    if (itemOnNewPosition != undefined) {
         var index = arr.indexOf(itemOnNewPosition);
         arr.splice(index, 1);
     }
 
-    if(arr && arr.length == 0){
+    if (characterProps.lifes === 0) {
+        window.alert("LOST")
+    }
+
+    if (arr && arr.length == 0) {
         window.alert("WIN")
     }
+
+
     return {itemConditions: arr};
 }
 
@@ -116,11 +152,12 @@ export const rootReducer = createReducer(initialState, {
     gameState: action.payload
   }),
   [movePlayer.type]: (state, action: PayloadAction<Direction>) => ({
-    ...state,
-    playerPosition: changePlayerPosition(state.gameMap, state.playerPosition, action.payload),
-    opponents: fightAndUpdateOpponents(state.playerPosition, state.opponents, action.payload),
-    npcs: npcInteract(state.playerPosition, state.npcs, action.payload),
-      endingConditions: endingInteract(state.playerPosition, state.endingConditions, state.inventoryItems,action.payload)
+      ...state,
+      playerPosition: changePlayerPosition(state.gameMap, state.playerPosition, action.payload),
+      characterProps: fightAndUpdateCharacter(state.gameMap, state.playerPosition, state.opponents, action.payload, state.characterProps),
+      opponents: fightAndUpdateOpponents(state.gameMap, state.playerPosition, state.opponents, action.payload),
+      npcs: npcInteract(state.playerPosition, state.npcs, action.payload),
+      endingConditions: endingInteract(state.playerPosition, state.endingConditions, state.inventoryItems, action.payload, state.characterProps)
   }),
   [deleteItemFromMap.type]: (state, action: PayloadAction<Position>) => void ({
     ...state,
