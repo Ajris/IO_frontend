@@ -2,69 +2,42 @@ import React from "react";
 import { connect } from "react-redux";
 import MapRow from "./MapRow";
 import { Tile } from "../../model/tile";
-import RootState, { Position } from "../../store/rootState";
-import {Opponents} from "../opponent/Opponent";
-import {NpcProps} from "../npc/Npc";
-import {Items} from "../../store/reducers";
+import RootState, { PlayerPosition } from "../../store/rootState";
 
 interface MapProps {
   gameMap: Tile[][],
-  playerPosition: Position,
-  items: Items,
-  opponents: Opponents,
-  npcs: NpcProps[];
+  playerPosition: PlayerPosition,
 }
 
-const placeTile = (gameMap: Tile[][], position: Position, tileType: Tile) => {
-  const clonedMap = gameMap.map(arr => arr.slice());
-  clonedMap[position[0]][position[1]] = tileType;
+const placePlayer = (gameMap: Tile[][], playerPosition: PlayerPosition) => {
+  var clonedMap = gameMap.map(function(arr) {
+      return arr.slice();
+  });
+  clonedMap[playerPosition[0]][playerPosition[1]] = Tile.Player;
   return clonedMap;
 };
 
-const placeOpponents = (gameMap: Tile[][], opponents: Opponents) => {
-    var clonedMap = gameMap.map(function (arr) {
-        return arr.slice();
-    });
-
-    opponents.opponents.forEach(opponent =>
-        clonedMap[opponent.position[0]][opponent.position[1]] = Tile.Opponent
-    )
-
-    return clonedMap;
+const placeItem = (gameMap: Tile[][], playerPosition: PlayerPosition) => {
+  var clonedMap = gameMap.map(function(arr) {
+    return arr.slice();
+  });
+  clonedMap[playerPosition[0]][playerPosition[1]] = Tile.Item;
+  return clonedMap;
 };
 
-const placeNpcs = (gameMap: Tile[][], npcs: NpcProps[]) => {
-    var clonedMap = gameMap.map(function (arr) {
-        return arr.slice();
-    });
-
-    npcs.forEach(npc =>
-        clonedMap[npc.position[0]][npc.position[1]] = Tile.Npc
-    )
-
-    return clonedMap;
-};
-
-const Map = ({ gameMap, playerPosition, items, opponents, npcs }: MapProps) => {
-  let mapWithPlayer = placeTile(gameMap, playerPosition, Tile.Player);
-  items.itemsOnMap.forEach(item => mapWithPlayer = placeTile(mapWithPlayer, [item.position!![0], item.position!![1]], Tile.Item));
-
-    let mapWithOpponent = placeOpponents(mapWithPlayer, opponents)
-    const mapWithNpcXd = placeNpcs(mapWithOpponent, npcs)
+const Map = ({ gameMap, playerPosition }: MapProps) => {
+  let mapWithPlayer = placePlayer(gameMap, playerPosition);
+  let mapWithItem = placeItem(mapWithPlayer, [2,2])
   return (
   <div className="map">
-    {mapWithNpcXd.map(row => <MapRow tiles={row} />)}
+    {mapWithItem.map(row => <MapRow tiles={row} />)}
   </div>
   )
 };
 
-const mapStateToProps = ({ gameMap, playerPosition, items, opponents, npcs }: RootState) => ({
+const mapStateToProps = ({ gameMap, playerPosition }: RootState) => ({
   gameMap: gameMap,
   playerPosition: playerPosition,
-  items: items,
-  opponents: opponents,
-  npcs: npcs
 });
-
 
 export default connect(mapStateToProps)(Map);

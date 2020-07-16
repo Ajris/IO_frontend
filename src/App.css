@@ -1,13 +1,6 @@
-body {
-	background-color: grey;
-}
-
 .map {
-
-	margin: auto;
 	display: flex;
 	flex-direction: column;
-	border: 3px solid black;
 }
 
 .map-row {
@@ -15,19 +8,15 @@ body {
 }
 
 .map-tile {
-	width: 3vw;
-	height: 3vw;
-	background-repeat: no-repeat; /* Do not repeat the image */
-	background-size: cover; /* Resize the background image to cover the entire container */
+	width: 5vw;
+	height: 5vw;
 }
 
 .item {
 	width: 3vw;
 	height: 3vw;
-	/*margin: 1vw;*/
-	font-size: 0vw;
-	background-repeat: no-repeat; /* Do not repeat the image */
-	background-size: cover; /* Resize the background image to cover the entire container */
+	margin: 1vw;
+	font-size: 1vw;
 }
 
 .main-layout {
@@ -36,15 +25,15 @@ body {
 }
 
 .inventory {
-	background-color: darkgrey;
+	background-color: green;
 	width: 10vw;
 	height: 10vw;
 	text-align: center;
 	margin-left: 10px;
+	margin-top: 10px;
 }
-
 .location {
-	background-color: dimgray;
+	background-color: blue;
 	width: 10vw;
 	height: 10vw;
 	text-align: center;
@@ -53,7 +42,7 @@ body {
 }
 
 .character {
-	background-color: lightgray;
+	background-color: yellow;
 	width: 10vw;
 	height: 10vw;
 	text-align: center;
@@ -63,6 +52,6 @@ body {
 .btn {
 	border: 10px black;
 	background-color: red;
-	font-size: 0px;
+	font-size: 16px;
 	cursor: pointer;
 }

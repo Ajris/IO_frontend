@@ -1,23 +1,17 @@
 import React from 'react';
 import ItemView, {ItemProps} from "./Item";
-import RootState from "../../store/rootState";
-import { connect } from "react-redux";
 
+export interface InventoryProps {
+    itemProps: ItemProps[];
+};
 
-const Inventory = (itemProps: ItemProps[]) => {
+const Inventory = ({itemProps}: InventoryProps) => {
     return (
         <div className="inventory">
             Inventory
-            {/*{itemProps.map(item => (*/}
-            {/*    <ItemView {...item}/>*/}
-            {/*))}*/}
-            <ItemView {...itemProps[0]}/>
+            {itemProps.map(item => <ItemView {...item}/>)}
         </div>
     )
 };
 
-const mapStateToProps = ({ items }: RootState) => ({
-    itemProps: items.inventoryItems
-  });
-  
-export default connect(mapStateToProps)(Inventory);
+export default Inventory;
