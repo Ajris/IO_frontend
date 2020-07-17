@@ -4,6 +4,7 @@ export enum Tile {
   Player,
   Item,
   Opponent,
-  Npc
+  Npc,
+  Chest
 };
 

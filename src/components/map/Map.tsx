@@ -45,9 +45,10 @@ const placeNpcs = (gameMap: Tile[][], npcs: NpcProps[]) => {
     return clonedMap;
 };
 
-const Map = ({ gameMap, playerPosition, items, opponents, npcs }: MapProps) => {
+const Map = ({ gameMap, playerPosition, items, opponents, npcs}: MapProps) => {
   let mapWithPlayer = placeTile(gameMap, playerPosition, Tile.Player);
   items.itemsOnMap.forEach(item => mapWithPlayer = placeTile(mapWithPlayer, [item.position!![0], item.position!![1]], Tile.Item));
+  items.chests.forEach(chest => mapWithPlayer = placeTile(mapWithPlayer, chest.position, Tile.Chest));
 
     let mapWithOpponent = placeOpponents(mapWithPlayer, opponents)
     const mapWithNpcXd = placeNpcs(mapWithOpponent, npcs)
@@ -57,6 +58,8 @@ const Map = ({ gameMap, playerPosition, items, opponents, npcs }: MapProps) => {
   </div>
   )
 };
+
+
 
 const mapStateToProps = ({ gameMap, playerPosition, items, opponents, npcs }: RootState) => ({
   gameMap: gameMap,

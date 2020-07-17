@@ -5,6 +5,7 @@ import {Tile} from "../model/tile";
 import {EndingConditionsProps} from "../components/ending/EndingConditionsProps";
 import {CharacterProps} from "../components/character/Character";
 import {Items} from "./reducers";
+import {ChestProps} from "../components/chest/Chest";
 
 export enum GameState {
   IN_PROGRESS,

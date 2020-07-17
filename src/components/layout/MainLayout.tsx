@@ -4,7 +4,6 @@ import Inventory from "../inventory/Inventory";
 import Character, {CharacterProps} from "../character/Character";
 import Location, {LocationProps} from "../location/Location";
 import RootState, { Position } from "../../store/rootState";
-import { ItemProps } from '../inventory/Item';
 import { connect } from 'react-redux';
 import {Items} from "../../store/reducers";
 

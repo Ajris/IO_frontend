@@ -25,7 +25,7 @@
 			"name": "itemik",
 			"color": "red",
 			"position": [2,2],
-			"image": "/graphics/item_green.PNG"
+			"image": "/graphics/item_red.PNG"
 		},
 		{
 			"name": "itemik",
@@ -97,5 +97,20 @@
 				"position": [3,3]
 			}
 		]
-	}
+	},
+	"chests": [
+		{
+			"position": [6,6],
+			"item": {
+				"name": "itemik",
+				"color": "red",
+				"position": [6,6],
+				"image": "/graphics/item_red.PNG"
+			},
+			"question": {
+				"content": "Is it possible to reverse a Unicode string?",
+				"answer": "No"
+			}
+		}
+	]
 }
