@@ -24,11 +24,15 @@ const getTileColor = (tile: Tile): string => {
       return "#454545ff";
     case Tile.Npc:
         return "#454545ff";
+    case Tile.Chest:
+      return "#454545ff";
   }
 };
 
 const getTileImage = (tile: Tile): string => {
   switch (tile) {
+    case Tile.Chest:
+      return "/graphics/green_chest.PNG";
     case Tile.Wall:
       return "/graphics/wall.png";
     case Tile.Floor:

@@ -9,6 +9,7 @@ import {NpcProps} from "../components/npc/Npc";
 import {EndingConditionsProps} from "../components/ending/EndingConditionsProps";
 import config from '../game-config.json';
 import {CharacterProps} from "../components/character/Character";
+import {ChestProps} from "../components/chest/Chest";
 
 const getGameMap = (encodedMap: string[]) => (
   encodedMap.map(encodedRow => (
@@ -22,17 +23,19 @@ export const initialState: RootState = {
     playerPosition: config.playerPosition as Position,
     items: {
         itemsOnMap: config.items,
-        inventoryItems: []
+        inventoryItems: [],
+        chests: config.chests
     },
     opponents: {opponents: config.mobs},
     npcs: config.npcs,
     endingConditions: config.endingConditions,
-    characterProps: config.characterProps,
+    characterProps: config.characterProps
 };
 
 export interface Items {
-    itemsOnMap: ItemProps[],
-    inventoryItems: ItemProps[]
+    itemsOnMap: ItemProps[];
+    inventoryItems: ItemProps[];
+    chests: ChestProps[];
 }
 
 const canMoveTo = (map: Tile[][], position: Position): boolean => {
@@ -59,12 +62,13 @@ const positionAfterMovement = (position: Position,
   }
 };
 
-const changePlayerPosition = (map: Tile[][], position: Position,
-  direction: Direction): Position => {
+const changePlayerPosition = (map: Tile[][], position: Position, items: Items, direction: Direction): Position => {
   const newPos = positionAfterMovement(position, direction);
 
-  if(isItem(map, newPos)){
-      return newPos;
+  const chest = items.chests.filter(chest => chest.position[0] === newPos[0] && chest.position[1] === newPos[1])[0];
+
+  if(chest){
+      return position;
   }
   return canMoveTo(map, newPos) ? newPos : position;
 };
@@ -152,12 +156,26 @@ const itemInteract = (position: Position, items: Items, direction: Direction): I
     });
 
     const itemsAfterDelete = items.itemsOnMap.filter(item => item.position!![0] !== newPos[0] || item.position![1] !== newPos[1]);
-    console.log(inventory.length);
+
+    const chests = items.chests;
+    let chestsAfterDelete = chests;
+
+    const chest = chests.filter(chest => chest.position[0] === newPos[0] && chest.position[1] === newPos[1])[0];
+    if(chest) {
+        const answer = prompt("To get item answer following question:\n" + chest.question.content);
+        if (answer === chest.question.answer) {
+            chestsAfterDelete = chests.filter(chest => chest.position[0] !== newPos[0] || chest.position[1] !== newPos[1])
+            inventory.push(chest.item);
+        }
+    }
+
     return {
         itemsOnMap: itemsAfterDelete,
-        inventoryItems: inventory
+        inventoryItems: inventory,
+        chests: chestsAfterDelete
     };
 };
+
 
 export const rootReducer = createReducer(initialState, {
   [setGameState.type]: (state, action: PayloadAction<GameState>) => ({
@@ -166,11 +184,11 @@ export const rootReducer = createReducer(initialState, {
   }),
   [movePlayer.type]: (state, action: PayloadAction<Direction>) => ({
     ...state,
-      playerPosition: changePlayerPosition(state.gameMap, state.playerPosition, action.payload),
+      playerPosition: changePlayerPosition(state.gameMap, state.playerPosition, state.items, action.payload),
       characterProps: fightAndUpdateCharacter(state.gameMap, state.playerPosition, state.opponents, action.payload, state.characterProps),
       opponents: fightAndUpdateOpponents(state.playerPosition, state.opponents, action.payload),
       npcs: npcInteract(state.playerPosition, state.npcs, action.payload),
       endingConditions: endingInteract(state.playerPosition, state.endingConditions, state.items.itemsOnMap, action.payload, state.characterProps),
-    items: itemInteract(state.playerPosition, state.items, action.payload)
+      items: itemInteract(state.playerPosition, state.items, action.payload)
   })
 });
