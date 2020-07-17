@@ -37,7 +37,7 @@
 			"name": "item",
 			"color": "yellow",
 			"position": [3,3],
-			"image": "/graphics/item_green.PNG"
+			"image": "/graphics/item_blue.PNG"
 
 		}
 	],

@@ -32,7 +32,7 @@ const getTileColor = (tile: Tile): string => {
 const getTileImage = (tile: Tile): string => {
   switch (tile) {
     case Tile.Chest:
-      return "/graphics/green_chest.PNG";
+      return "/graphics/blue_chest.PNG";
     case Tile.Wall:
       return "/graphics/wall.png";
     case Tile.Floor:
@@ -40,7 +40,7 @@ const getTileImage = (tile: Tile): string => {
     case Tile.Player:
       return "/graphics/player.PNG";
     case Tile.Item:
-      return "/graphics/item_green.PNG"; // because item is above item tile
+      return "/graphics/floor.PNG"; // because item is above item tile
     case Tile.Opponent:
       return "/graphics/opponent.PNG";
     case Tile.Npc:
